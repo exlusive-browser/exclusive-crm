@@ -5,6 +5,7 @@ import { ClienDetailPage } from "../features/client/pages/ClientDetail/ClienDeta
 import { ClientUpdatePage } from "../features/client/pages/ClientUpdate/ClientUpdatePage";
 import { ClienCreatePage } from "../features/client/pages/ClientCreate/ClienCreatePage";
 import { HomePage } from "../features/home/HomePage";
+import { OpportuniesListPage } from "../features/opportunites/pages/OpportuniesList/OpportuniesListPage";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
   {
     path: "/clients/:id",
     element: <ClienDetailPage />,
+  },
+  {
+    path: "/opportunities",
+    element: <OpportuniesListPage />,
   },
   {
     path: "*",
