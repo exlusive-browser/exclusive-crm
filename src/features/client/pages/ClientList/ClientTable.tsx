@@ -1,3 +1,4 @@
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import {
@@ -81,6 +82,16 @@ export function ClientsTable() {
       cellClassName: "actions",
       getActions: ({ id, row }) => {
         return [
+          <GridActionsCellItem
+            icon={<VisibilityIcon />}
+            label="See More"
+            className="textPrimary"
+            component={Link}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            to={`/clients/${id}`}
+            color="inherit"
+          />,
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
