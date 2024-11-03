@@ -1,7 +1,9 @@
+import { ClientDetail } from "./ClientDetailTop";
+
 export function ClienDetailPage() {
   return (
     <div>
-      <p>Client Detail Page</p>
+      <ClientDetail />
     </div>
   );
 }
