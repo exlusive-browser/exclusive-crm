@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
 import logoCMR from '../assets/images/logoCMR.svg';
 
 const Header: React.FC = () => {
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
+    const theme = useTheme();
 
     const handleResize = useCallback(() => {
         setIsMobile(window.innerWidth <= 768);
@@ -16,31 +22,36 @@ const Header: React.FC = () => {
     }, [handleResize]);
 
     return (
-        <header style={headerStyle}>
-            <img
-                src={logoCMR}
-                alt="NEXUS Logo"
-                style={isMobile ? mobileLogoStyle : logoStyle}
-            />
-        </header>
+        <AppBar position="static" style={headerStyle}>
+            <Toolbar style={{ justifyContent: 'center', paddingTop: '20px' }}>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                    <img
+                        src={logoCMR}
+                        alt="NEXUS Logo"
+                        style={isMobile ? mobileLogoStyle : logoStyle}
+                    />
+                    <Typography variant="h6" style={{ marginTop: theme.spacing(0.5) }}>
+                        NEXUS
+                    </Typography>
+                </Box>
+            </Toolbar>
+        </AppBar>
     );
 };
 
 const headerStyle: React.CSSProperties = {
     backgroundColor: 'white',
-    padding: '15px 0px',
-    textAlign: 'center',
     boxShadow: '0px 4px 2px -2px gray',
 };
 
 const logoStyle: React.CSSProperties = {
     width: '300px',
-    marginBottom: '10px',
+    marginBottom: '5px', // Ajusta este valor para reducir el espacio debajo del logo
 };
 
 const mobileLogoStyle: React.CSSProperties = {
-    width: '200px',  // Ajusta el tamaño del logo para pantallas móviles
-    marginBottom: '10px',
+    width: '250px',  // Ajusta el tamaño del logo para pantallas móviles
+    marginBottom: '5px', // Ajusta este valor para reducir el espacio debajo del logo en móviles
 };
 
 export default Header;

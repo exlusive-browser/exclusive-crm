@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import clientIcon from "../assets/images/client.svg";
+import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Subheader: React.FC = () => {
     const [activeItem, setActiveItem] = useState<string | null>(null);
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
     const [showUserName, setShowUserName] = useState<boolean>(false);
+    const [appBarHeight] = useState<number>(80);
+    const mobileAppBarHeight = 100;
 
     const handleResize = useCallback(() => {
         setIsMobile(window.innerWidth <= 768);
@@ -17,129 +20,64 @@ const Subheader: React.FC = () => {
         };
     }, [handleResize]);
 
-    const handleMouseEnter = (item: string) => {
-        setActiveItem(item);
-    };
-
-    const handleMouseLeave = () => {
-        setActiveItem(null);
-    };
-
-    const handleClick = (item: string, event: React.MouseEvent<HTMLAnchorElement>) => {
-        event.preventDefault();
+    const handleMenuClick = (item: string) => {
         setActiveItem(item);
         window.history.pushState(null, '', `/${item}`);
     };
 
+    const handleIconClick = () => {
+        setShowUserName(prev => !prev);
+    };
+
     return (
-        <div style={isMobile ? mobileSubheaderStyle : subheaderStyle}>
-            <nav style={isMobile ? mobileMenuStyle : menuStyle}>
-                {["Clients", "Opportunities", "Tracking"].map((item) => (
-                    <a
-                        key={item}
-                        href="#"
-                        style={getMenuItemStyle(item)}
-                        onMouseEnter={() => handleMouseEnter(item)}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={(event) => handleClick(item, event)}
-                    >
-                        {item}
-                    </a>
-                ))}
-            </nav>
-            <div style={userStyle}>
-                {isMobile ? (
-                    <div style={mobileUserContainer}>
-                        <img
-                            src={clientIcon}
-                            alt="Profile Icon"
-                            style={iconStyle}
-                            onClick={() => setShowUserName(prev => !prev)}
-                        />
-                        {showUserName && (
-                            <span style={userNameStyle}>Nathalia M. De La Rans Blanco</span>
-                        )}
-                    </div>
-                ) : (
-                    <>
-                        <img src={clientIcon} alt="Profile Icon" style={iconStyle} />
-                        <span style={userNameStyle}>Nathalia M. De La Rans Blanco</span>
-                    </>
-                )}
-            </div>
-        </div>
+        <AppBar position="static" style={{ backgroundColor: '#708d8d', height: isMobile ? mobileAppBarHeight : appBarHeight }}>
+            <Toolbar style={{ justifyContent: 'space-between', height: '100%' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: isMobile ? 'flex-start' : 'space-between' }}>
+                    {["Clients", "Opportunities", "Tracking"].map((item) => (
+                        <IconButton
+                            key={item}
+                            onClick={() => handleMenuClick(item)}
+                            style={{
+                                color: 'white',
+                                padding: '10px 15px',
+                                backgroundColor: activeItem === item ? '#4a6868' : 'transparent',
+                                borderRadius: '6px',
+                                transition: 'background-color 0.3s ease',
+                                margin: isMobile ? '0 0px' : '0 0px',
+                            }}
+                            onMouseEnter={() => setActiveItem(item)}
+                            onMouseLeave={() => {
+                                if (activeItem !== item) {
+                                    setActiveItem(null);
+                                }
+                            }}
+                        >
+                            <Typography variant="body2" style={{ color: 'white' }}>
+                                {item}
+                            </Typography>
+                        </IconButton>
+                    ))}
+                </div>
+                <div style={{ display: 'flex', alignItems: isMobile ? 'flex-start' : 'center', flexDirection: isMobile ? 'column' : 'row' }}>
+                    <IconButton onClick={handleIconClick} style={{ padding: 0 }}>
+                        <PersonIcon style={{ width: '30px', height: '30px', cursor: 'pointer', color: 'white' }} />
+                    </IconButton>
+                    { }
+                    {!isMobile && (
+                        <Typography variant="body2" style={{ color: 'white', marginLeft: '5px' }}>
+                            Nathalia De La Rans Blanco
+                        </Typography>
+                    )}
+                    { }
+                    {isMobile && showUserName && (
+                        <Typography variant="body2" style={{ color: 'white', marginTop: '5px' }}>
+                            Nathalia De La Rans Blanco
+                        </Typography>
+                    )}
+                </div>
+            </Toolbar>
+        </AppBar>
     );
-
-    function getMenuItemStyle(item: string): React.CSSProperties {
-        return {
-            ...menuItemStyle,
-            backgroundColor: activeItem === item ? '#4a6868' : 'transparent',
-        };
-    }
-};
-
-const subheaderStyle: React.CSSProperties = {
-    backgroundColor: '#708d8d',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '20px 40px',
-    height: '70px',
-    flexWrap: 'wrap',
-};
-
-const mobileSubheaderStyle: React.CSSProperties = {
-    backgroundColor: '#708d8d',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '15px',
-};
-
-const menuStyle: React.CSSProperties = {
-    display: 'flex',
-    gap: '30px',
-    flexWrap: 'wrap',
-};
-
-const mobileMenuStyle: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    gap: '10px',
-};
-
-const menuItemStyle: React.CSSProperties = {
-    color: 'white',
-    textDecoration: 'none',
-    fontWeight: '300',
-    padding: '5px 10px',
-    borderRadius: '5px',
-    transition: 'background-color 0.2s ease',
-    fontSize: '14px',
-};
-
-const userStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-};
-
-const mobileUserContainer: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-};
-
-const iconStyle: React.CSSProperties = {
-    width: '20px',
-    cursor: 'pointer',
-};
-
-const userNameStyle: React.CSSProperties = {
-    color: 'white',
-    fontWeight: '300',
-    fontSize: '14px',
-    marginTop: '5px',
 };
 
 export default Subheader;
