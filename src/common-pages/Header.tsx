@@ -46,12 +46,12 @@ const headerStyle: React.CSSProperties = {
 
 const logoStyle: React.CSSProperties = {
     width: '300px',
-    marginBottom: '5px', // Ajusta este valor para reducir el espacio debajo del logo
+    marginBottom: '5px',
 };
 
 const mobileLogoStyle: React.CSSProperties = {
-    width: '250px',  // Ajusta el tamaño del logo para pantallas móviles
-    marginBottom: '5px', // Ajusta este valor para reducir el espacio debajo del logo en móviles
+    width: '250px',
+    marginBottom: '5px',
 };
 
 export default Header;
