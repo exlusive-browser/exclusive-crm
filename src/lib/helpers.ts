@@ -4,3 +4,8 @@ export function formatCurrency(value: number): string {
     currency: "COP",
   }).format(value);
 }
+
+export function getRandomId(): number {
+  // random id between 10000 and 99999999
+  return Math.floor(Math.random() * 99999999) + 10000;
+}

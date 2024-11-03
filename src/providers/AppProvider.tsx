@@ -2,6 +2,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import { muiTheme } from "../styles/theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider } from "notistack";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -14,9 +16,11 @@ export function AppProvider({ children }: AppProviderProps) {
   return (
     <SnackbarProvider>
       <ThemeProvider theme={muiTheme}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </LocalizationProvider>
       </ThemeProvider>
     </SnackbarProvider>
   );
