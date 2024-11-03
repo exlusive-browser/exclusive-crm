@@ -48,7 +48,7 @@ export function ClientsTable() {
     {
       field: "country",
       headerName: "Country",
-      width: 120,
+      width: 150,
       editable: false,
     },
     {
@@ -66,7 +66,7 @@ export function ClientsTable() {
     {
         field: "active",
         headerName: "Active",
-        width: 80,
+        width: 120,
         editable: false,
         renderCell: (params) => (
             <Typography style={{ color: params.value ? "inherit" : "red", lineHeight: "unset" }}>
