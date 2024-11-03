@@ -6,6 +6,7 @@ import { ClientUpdatePage } from "../features/client/pages/ClientUpdate/ClientUp
 import { ClienCreatePage } from "../features/client/pages/ClientCreate/ClienCreatePage";
 import { HomePage } from "../features/home/HomePage";
 import { OpportuniesListPage } from "../features/opportunites/pages/OpportuniesList/OpportuniesListPage";
+import { OpportunitiesCreatePage } from "../features/opportunites/pages/OpportunitiesCreate/OpportunitiesCreatePage";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
   {
     path: "/opportunities",
     element: <OpportuniesListPage />,
+  },
+  {
+    path: "/opportunities/create",
+    element: <OpportunitiesCreatePage />,
   },
   {
     path: "*",
