@@ -16,3 +16,7 @@ export async function getClients(): Promise<RepoClient[]> {
     const response = await axiosClient.get<RepoClient[]>('/clients');
     return response.data;
 }
+export async function getClient(id: number): Promise<RepoClient> {
+    const response = await axiosClient.get<RepoClient>(`/clients/${id}`);
+    return response.data;
+}
