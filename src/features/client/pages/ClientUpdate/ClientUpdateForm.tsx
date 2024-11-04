@@ -12,6 +12,7 @@ export function ClientUpdateForm({ id }: ClientUpdateFormProps) {
   const {
     isLoading,
     isError,
+    isMutationLoading,
     Data,
     register,
     finalOnSubmit: handleSubmit,
@@ -147,8 +148,13 @@ export function ClientUpdateForm({ id }: ClientUpdateFormProps) {
             helperText={errors.corporateEmail?.message}
           />
 
-          <PrimaryButton type="submit" fullWidth>
-            Submit
+          <PrimaryButton
+            type="submit"
+            fullWidth
+            sx={{ marginTop: 2 }}
+            disabled={isMutationLoading}
+          >
+            {isMutationLoading ? "Submitting..." : "Submit"}
           </PrimaryButton>
         </Grid>
       </Box>

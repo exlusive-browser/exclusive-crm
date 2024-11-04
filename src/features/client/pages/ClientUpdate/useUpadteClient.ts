@@ -47,6 +47,8 @@ export function useUpdateClient({ id }: useUpdateClientProps) {
     },
   });
 
+  const isMutationLoading = mutation.status === "pending";
+
   const {
     register,
     handleSubmit,
@@ -63,5 +65,13 @@ export function useUpdateClient({ id }: useUpdateClientProps) {
 
   const finalOnSubmit = handleSubmit(onSubmit);
 
-  return { isLoading, isError, Data, register, finalOnSubmit, errors };
+  return {
+    isLoading,
+    isError,
+    Data,
+    isMutationLoading,
+    register,
+    finalOnSubmit,
+    errors,
+  };
 }
