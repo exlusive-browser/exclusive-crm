@@ -1,9 +1,20 @@
-import React from 'react';
+import { useState } from 'react';
 import { PrimaryLinkButton } from "../../../../components/buttons";
 import { Container, TextField, Button, Box, Typography, Grid, FormControlLabel, Checkbox } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/PersonRemove'; 
 
 export function ClienCreatePage() {
+  const [contacts, setContacts] = useState([{ firstName: '', lastName: '', email: '', phone: '' }]);
+
+  const handleAddContact = () => {
+    setContacts([...contacts, { firstName: '', lastName: '', email: '', phone: '' }]);
+  };
+
+  const handleRemoveContact = (index: number) => {
+    const newContacts = contacts.filter((_, i) => i !== index);
+    setContacts(newContacts);
+  };
 
   return (
     <Box
@@ -12,16 +23,17 @@ export function ClienCreatePage() {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        backgroundColor: 'primary.light',
+        backgroundColor: { xs: 'transparent', sm: 'primary.light' }, 
+        padding: { xs: 0, sm: 2 },
       }}
     >
       <Container
         sx={{
           backgroundColor: 'white',
-          padding: 4,
-          borderRadius: 2,
-          boxShadow: 3,
-          width: '500px',
+          padding: { xs: "0 20px", sm: 4 }, 
+          borderRadius: { xs: "none", sm: 2 }, 
+          boxShadow: { xs: 'none', sm: 3 }, 
+          width: { xs: '100%', sm: '700px' }, 
           maxHeight: '90vh',
           overflowY: 'auto',
         }}
@@ -89,7 +101,7 @@ export function ClienCreatePage() {
 
         <FormControlLabel
           control={<Checkbox />}
-          label="Is Active?"
+          label="Is Active"
           sx={{ margin: '12px 0 16px' }}
         />
 
@@ -97,47 +109,96 @@ export function ClienCreatePage() {
           Contact(s)
         </Typography>
 
-        {/* Contact data */}
-        <Box
-          sx={{
-            border: '1px solid gray',
-            padding: 2,
-            marginBottom: 2,
-            borderRadius: 2,
-          }}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="First Name"
-                variant="outlined"
-              />
+        {/* Render Contact list */}
+        {contacts.map((contact, index) => (
+          <Box
+            key={index}
+            sx={{
+              border: '2px solid gray',
+              borderColor: "primary.light",
+              padding: 2,
+              marginBottom: 2,
+              borderRadius: 2,
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="First Name"
+                  variant="outlined"
+                  value={contact.firstName}
+                  onChange={(e) => {
+                    const newContacts = [...contacts];
+                    newContacts[index].firstName = e.target.value;
+                    setContacts(newContacts);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Last Name"
+                  variant="outlined"
+                  value={contact.lastName}
+                  onChange={(e) => {
+                    const newContacts = [...contacts];
+                    newContacts[index].lastName = e.target.value;
+                    setContacts(newContacts);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  variant="outlined"
+                  value={contact.email}
+                  onChange={(e) => {
+                    const newContacts = [...contacts];
+                    newContacts[index].email = e.target.value;
+                    setContacts(newContacts);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Phone"
+                  variant="outlined"
+                  value={contact.phone}
+                  onChange={(e) => {
+                    const newContacts = [...contacts];
+                    newContacts[index].phone = e.target.value;
+                    setContacts(newContacts);
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Last Name"
+            {contacts.length > 1 && (
+              <Button
                 variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Email"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Phone"
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-        </Box>
+                sx={{ 
+                  marginTop: 2, 
+                  color: "red",
+                  borderColor: "red",
+                  justifyContent: 'center', 
+                  width: '100%'
+                }}
+                onClick={() => handleRemoveContact(index)}
+                startIcon={<RemoveIcon />}
+              >
+                Remove
+              </Button>
+            )}
+          </Box>
+        ))}
 
-        <Button variant="outlined" sx={{ marginBottom: 2, display: 'flex', alignItems: 'center' }}>
+        <Button
+          variant="outlined"
+          sx={{ marginBottom: 2, display: 'flex', alignItems: 'center' }}
+          onClick={handleAddContact}
+        >
           <AddIcon sx={{ marginRight: "5px" }} />
           Add Contact
         </Button>
