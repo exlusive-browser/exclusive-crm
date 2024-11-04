@@ -22,6 +22,7 @@ export function ClienCreatePage() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        height: { xs: "100%", sm: "100vh" },
         backgroundColor: { xs: 'transparent', sm: 'primary.light' },
         padding: { xs: 0, sm: 2 },
       }}
