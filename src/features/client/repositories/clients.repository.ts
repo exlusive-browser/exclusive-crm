@@ -26,7 +26,7 @@ export async function updateClient(
   id: number,
   clientData: Omit<RepoClient, "id">
 ): Promise<RepoClient> {
-  const response = await axiosClient.put<RepoClient>(
+  const response = await axiosClient.patch<RepoClient>(
     `/clients/${id}`,
     clientData
   );
