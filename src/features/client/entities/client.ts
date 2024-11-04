@@ -32,6 +32,7 @@ export const ClientUpadteunityInputSchema = z.object({
     .max(255, "Country name is too long"),
   phone: z.string().min(1, "Phone is required").max(255, "Phone is too long"),
   corporateEmail: z.string().email("Invalid email"),
+  active: z.boolean(),
 });
 
 export type ClientUpadteunityInput = z.infer<
