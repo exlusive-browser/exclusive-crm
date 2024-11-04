@@ -34,7 +34,7 @@ export function useUpdateClient({ id }: useUpdateClientProps) {
       queryClient.invalidateQueries({ queryKey: ["opportunities"] });
 
       enqueueSnackbar(
-        "Client is updated successfully",
+        "Client was updated successfully",
         SUCCESS_SNACKBAR_OPTIONS
       );
     },
