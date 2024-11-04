@@ -22,7 +22,6 @@ export function ClienCreatePage() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
         backgroundColor: { xs: 'transparent', sm: 'primary.light' },
         padding: { xs: 0, sm: 2 },
       }}
@@ -190,8 +189,8 @@ export function ClienCreatePage() {
                   width: '100%',
 
                   '&:hover': {
-                    borderColor: 'red', // Change to your desired hover border color
-                    backgroundColor: '#fffafa', // Change to your desired hover background color
+                    borderColor: 'red', 
+                    backgroundColor: '#fffafa', 
                   },
                 }}
                 onClick={() => handleRemoveContact(index)}
