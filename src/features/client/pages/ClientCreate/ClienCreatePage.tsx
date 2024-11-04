@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box } from '@mui/material';
-import { ClientCreateForm } from './ClientCreateForm'; // Adjust the import path according to your project structure
+import { ClientCreateForm } from './ClientCreateForm'; 
 
 export function ClienCreatePage() {
   const [contacts, setContacts] = useState([{ firstName: '', lastName: '', email: '', phone: '' }]);
