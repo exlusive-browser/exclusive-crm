@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { PrimaryLinkButton } from "../../../../components/buttons";
 import { Container, TextField, Button, Box, Typography, Grid, FormControlLabel, Checkbox } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/PersonRemove'; 
+import AddIcon from '@mui/icons-material/PersonAdd';
+import RemoveIcon from '@mui/icons-material/PersonRemove';
 
 export function ClienCreatePage() {
   const [contacts, setContacts] = useState([{ firstName: '', lastName: '', email: '', phone: '' }]);
@@ -23,25 +23,29 @@ export function ClienCreatePage() {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        backgroundColor: { xs: 'transparent', sm: 'primary.light' }, 
+        backgroundColor: { xs: 'transparent', sm: 'primary.light' },
         padding: { xs: 0, sm: 2 },
       }}
     >
       <Container
         sx={{
           backgroundColor: 'white',
-          padding: { xs: "0 20px", sm: 4 }, 
-          borderRadius: { xs: "none", sm: 2 }, 
-          boxShadow: { xs: 'none', sm: 3 }, 
-          width: { xs: '100%', sm: '700px' }, 
-          maxHeight: '90vh',
+          padding: { xs: "0 20px", sm: 4 },
+          borderRadius: { xs: "none", sm: 2 },
+          boxShadow: { xs: 'none', sm: 3 },
+          width: { xs: '100%', sm: '700px' },
+          maxHeight: { xs: '100%', sm: '90vh' },
           overflowY: 'auto',
         }}
       >
 
         <PrimaryLinkButton
           variant="outlined"
-          sx={{ px: 2, marginBottom: 2 }}
+          sx={{
+            px: 2,
+            marginBottom: 2,
+            marginTop: { xs: 3, sm: 0 },
+          }}
           navigateTo="/clients"
         >
           Back
@@ -178,12 +182,17 @@ export function ClienCreatePage() {
             {contacts.length > 1 && (
               <Button
                 variant="outlined"
-                sx={{ 
-                  marginTop: 2, 
+                sx={{
+                  marginTop: 2,
                   color: "red",
-                  borderColor: "red",
-                  justifyContent: 'center', 
-                  width: '100%'
+                  borderColor: "#ff9494",
+                  justifyContent: 'center',
+                  width: '100%',
+
+                  '&:hover': {
+                    borderColor: 'red', // Change to your desired hover border color
+                    backgroundColor: '#fffafa', // Change to your desired hover background color
+                  },
                 }}
                 onClick={() => handleRemoveContact(index)}
                 startIcon={<RemoveIcon />}
@@ -199,13 +208,17 @@ export function ClienCreatePage() {
           sx={{ marginBottom: 2, display: 'flex', alignItems: 'center' }}
           onClick={handleAddContact}
         >
-          <AddIcon sx={{ marginRight: "5px" }} />
+          <AddIcon sx={{ marginRight: "5px", maxWidth: "22px" }} />
           Add Contact
         </Button>
 
         <PrimaryLinkButton
           fullWidth
-          sx={{ px: 2, marginTop: 5 }}
+          sx={{
+            px: 2,
+            marginTop: 5,
+            marginBottom: { xs: 3, sm: 0 },
+          }}
           navigateTo="/clients"
         >
           Create
