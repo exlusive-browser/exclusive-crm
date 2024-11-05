@@ -7,12 +7,10 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '../../repositories/clients.repository';
 import { useSnackbar } from "notistack";
-import {
-  ERROR_SNACKBAR_OPTIONS,
-  SUCCESS_SNACKBAR_OPTIONS,
-} from "../../../../components/customSnackbar";
+import { ERROR_SNACKBAR_OPTIONS, SUCCESS_SNACKBAR_OPTIONS } from "../../../../components/customSnackbar";
+import { createClientContact } from '../../repositories/contact.repository';
 
-interface Contact {
+interface ClientContact {
   firstName: string;
   lastName: string;
   email: string;
@@ -28,7 +26,6 @@ interface ClientData {
   phone: string;
   corporateEmail: string;
   active: boolean;
-  contacts: Contact[];
 }
 
 export function ClientCreateForm() {
@@ -41,52 +38,55 @@ export function ClientCreateForm() {
     phone: '',
     corporateEmail: '',
     active: false,
-    contacts: [],
   });
+
+  // Contact management
+  const [contacts, setContacts] = useState<ClientContact[]>([]);
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
-  const mutation = useMutation({
+  const clientMutation = useMutation({
     mutationFn: createClient,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['createClient'] });
+    onSuccess: async (createdClient) => {
       enqueueSnackbar("Client was created successfully", SUCCESS_SNACKBAR_OPTIONS);
+
+      const saveContactsPromises = contacts.map(contact =>
+        createClientContact({ ...contact, clientId: createdClient.id })
+      );
+
+      await Promise.all(saveContactsPromises);
+
+      queryClient.invalidateQueries({ queryKey: ['createClient'] });
     },
     onError: () => {
       enqueueSnackbar("Something went wrong, try again later", ERROR_SNACKBAR_OPTIONS);
     },
   });
 
-  const isMutationLoading = mutation.status === 'pending';
+  const isMutationLoading = clientMutation.status === 'pending';
 
-  {/* Handle change for contacts */ }
+  // Event Handlers
   const handleChange = (field: keyof ClientData, value: string | boolean) => {
     setClientData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleContactChange = (index: number, field: keyof Contact, value: string) => {
-    const updatedContacts = clientData.contacts.map((contact, i) =>
+  const handleContactChange = (index: number, field: keyof ClientContact, value: string) => {
+    const updatedContacts = contacts.map((contact, i) =>
       i === index ? { ...contact, [field]: value } : contact
     );
-    setClientData((prev) => ({ ...prev, contacts: updatedContacts }));
+    setContacts(updatedContacts);
   };
 
   const handleAddContact = () => {
-    setClientData((prev) => ({
-      ...prev,
-      contacts: [...prev.contacts, { firstName: '', lastName: '', email: '', phone: '' }],
-    }));
+    setContacts([...contacts, { firstName: '', lastName: '', email: '', phone: '' }]);
   };
 
   const handleRemoveContact = (index: number) => {
-    setClientData((prev) => ({
-      ...prev,
-      contacts: prev.contacts.filter((_, i) => i !== index),
-    }));
+    setContacts(contacts.filter((_, i) => i !== index));
   };
 
   const handleSubmit = () => {
-    mutation.mutate(clientData);
+    clientMutation.mutate(clientData);
   };
 
   return (
@@ -132,7 +132,7 @@ export function ClientCreateForm() {
       </Typography>
 
       {/* Render Contact list */}
-      {clientData.contacts.map((contact, index) => (
+      {contacts.map((contact, index) => (
         <Box key={index} sx={{ border: '2px solid gray', borderColor: 'primary.light', padding: 2, mb: 2, borderRadius: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
@@ -193,7 +193,7 @@ export function ClientCreateForm() {
         {isMutationLoading ? 'Creating...' : 'Create'}
       </Button>
 
-      {mutation.isError && (
+      {clientMutation.isError && (
         <Typography variant="body1" textAlign="center" sx={{ p: 2, color: 'error.main' }}>
           Oops, something went wrong. Please try again.
         </Typography>
