@@ -31,7 +31,7 @@ export function useUpdateClient({ id }: useUpdateClientProps) {
   const mutation = useMutation({
     mutationFn: (Data: ClientUpadteunityInput) => updateClient(id, Data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["opportunities"] });
+      queryClient.invalidateQueries({ queryKey: ["updateClient"] });
 
       enqueueSnackbar(
         "Client was updated successfully",
@@ -57,10 +57,13 @@ export function useUpdateClient({ id }: useUpdateClientProps) {
     resolver: zodResolver(ClientUpadteunityInputSchema),
   });
 
-  const onSubmit: SubmitHandler<ClientUpadteunityInput> = async (Data) => {
-    mutation.mutate({
-      ...Data,
-    });
+  const onSubmit: SubmitHandler<ClientUpadteunityInput> = async (formData) => {
+    const dataToUpdate = {
+      ...formData,
+      active: Data?.active ?? true,
+    };
+
+    mutation.mutate(dataToUpdate);
   };
 
   const finalOnSubmit = handleSubmit(onSubmit);

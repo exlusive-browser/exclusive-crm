@@ -28,7 +28,7 @@ export function ClientUpdatePage() {
           size="small"
           sx={{ px: 2, width: "fit-content", alignSelf: "flex-end" }}
           startIcon={<ChevronLeftIcon />}
-          navigateTo="/opportunities"
+          navigateTo="/clients"
         >
           Go back
         </PrimaryLinkButton>
