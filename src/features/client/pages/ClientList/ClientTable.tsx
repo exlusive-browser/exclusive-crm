@@ -16,12 +16,21 @@ import { Link } from "react-router-dom";
 export function ClientsTable() {
 
   const columns: GridColDef<RepoClient>[] = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 90, renderCell: (params) => (
+      <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+        {params.value}
+      </Typography>
+    ), },
     {
       field: "nit",
       headerName: "NIT",
       width: 150,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "name",
@@ -29,7 +38,7 @@ export function ClientsTable() {
       width: 220,
       editable: false,
       renderCell: (params) => (
-        <Link to={`/clients/${params.row.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link to={`/clients/${params.row.id}`} style={{ color: params.row.active ? 'inherit' : 'red', textDecoration: 'none' }}>
           {params.value}
         </Link>
       ),
@@ -39,30 +48,55 @@ export function ClientsTable() {
       headerName: "Address",
       width: 200,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "city",
       headerName: "City",
       width: 150,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "country",
       headerName: "Country",
       width: 150,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "phone",
       headerName: "Phone",
       width: 180,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "corporateEmail",
       headerName: "Corporate Email",
       width: 250,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "active",
