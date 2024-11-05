@@ -17,7 +17,7 @@ export function ClientUpdatePage() {
           padding: 2,
           margin: 2,
           borderRadius: 2,
-          px: 10,
+          px: 5,
           py: 5,
           display: "flex",
           flexDirection: "column",
