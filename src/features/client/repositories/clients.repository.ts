@@ -32,3 +32,8 @@ export async function updateClient(
   );
   return response.data;
 }
+
+export async function createClient(clientData: Omit<RepoClient, "id">): Promise<RepoClient> {
+  const response = await axiosClient.post<RepoClient>("/clients", clientData);
+  return response.data;
+}

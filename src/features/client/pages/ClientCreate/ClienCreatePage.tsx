@@ -1,42 +1,20 @@
-import { useState } from 'react';
 import { Box } from '@mui/material';
-import { ClientCreateForm } from './ClientCreateForm'; 
+import { ClientCreateForm } from './ClientCreateForm';
 
 export function ClienCreatePage() {
-  const [contacts, setContacts] = useState([{ firstName: '', lastName: '', email: '', phone: '' }]);
-
-  const handleAddContact = () => {
-    setContacts([...contacts, { firstName: '', lastName: '', email: '', phone: '' }]);
-  };
-
-  const handleRemoveContact = (index: number) => {
-    const newContacts = contacts.filter((_, i) => i !== index);
-    setContacts(newContacts);
-  };
-
-  const handleChangeContact = (index: number, field: keyof typeof contacts[number], value: string) => {
-    const newContacts = [...contacts];
-    newContacts[index][field] = value;
-    setContacts(newContacts);
-  };
-
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: { xs: "100%", sm: "100vh" },
+        height: "100%",
         backgroundColor: { xs: 'transparent', sm: 'primary.light' },
-        padding: { xs: 0, sm: 2 },
+        padding: { xs: 0, sm: "0 30px" },
       }}
     >
-      <ClientCreateForm
-        contacts={contacts}
-        onAddContact={handleAddContact}
-        onRemoveContact={handleRemoveContact}
-        onChangeContact={handleChangeContact}
-      />
+      <ClientCreateForm/>
+      
     </Box>
   );
 }
