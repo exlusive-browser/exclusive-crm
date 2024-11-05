@@ -141,19 +141,23 @@ export function ClientCreateForm() {
         sx={{
           px: 2,
           mt: 5,
+          mb: { xs: 5, sm: 0 },
           backgroundColor:
             isClientDataIncomplete ||
-              isContactDataIncomplete ?
+              isContactDataIncomplete ||
+              isMutationLoading ?
               "lightgray" : "primary.light",
           color:
             isClientDataIncomplete ||
-              isContactDataIncomplete ?
+              isContactDataIncomplete ||
+              isMutationLoading ?
               "black" : "white",
 
           '&:hover': {
             backgroundColor:
               isClientDataIncomplete ||
-                isContactDataIncomplete ?
+                isContactDataIncomplete ||
+                isMutationLoading ?
                 "lightgray" : "primary.dark",
           },
         }}
