@@ -13,8 +13,8 @@ export function ClienCreatePage() {
         padding: { xs: 0, sm: "0 30px" },
       }}
     >
-      <ClientCreateForm/>
-      
+      <ClientCreateForm />
+
     </Box>
   );
 }

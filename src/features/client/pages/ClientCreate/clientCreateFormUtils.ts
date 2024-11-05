@@ -1,4 +1,4 @@
-import { ClientData, ClientContact } from './ClientCreateForm'; 
+import { ClientData, ClientContactData } from './ClientCreateForm';
 import { createClientContact } from '../../repositories/contacts.repository';
 import { createClient } from '../../repositories/clients.repository';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ export const handleClientDataChange = (setClientData: React.Dispatch<React.SetSt
   setClientData(prev => ({ ...prev, [field]: value }));
 };
 
-export const handleContactChange = (contacts: ClientContact[], setContacts: React.Dispatch<React.SetStateAction<ClientContact[]>>, index: number, field: keyof ClientContact, value: string) => {
+export const handleContactChange = (contacts: ClientContactData[], setContacts: React.Dispatch<React.SetStateAction<ClientContactData[]>>, index: number, field: keyof ClientContactData, value: string) => {
   const updatedContacts = contacts.map((contact, i) =>
     i === index ? { ...contact, [field]: value } : contact
   );
@@ -19,17 +19,17 @@ export const handleContactChange = (contacts: ClientContact[], setContacts: Reac
 // --------------------
 
 // Handle Contact
-export const handleAddContact = (contacts: ClientContact[], setContacts: React.Dispatch<React.SetStateAction<ClientContact[]>>) => {
+export const handleAddContact = (contacts: ClientContactData[], setContacts: React.Dispatch<React.SetStateAction<ClientContactData[]>>) => {
   setContacts([...contacts, { firstName: '', lastName: '', email: '', phone: '' }]);
 };
 
-export const handleRemoveContact = (contacts: ClientContact[], setContacts: React.Dispatch<React.SetStateAction<ClientContact[]>>, index: number) => {
+export const handleRemoveContact = (contacts: ClientContactData[], setContacts: React.Dispatch<React.SetStateAction<ClientContactData[]>>, index: number) => {
   setContacts(contacts.filter((_, i) => i !== index));
 };
 // --------------------
 
 // Mutation for creating a client
-export const useClientCreateMutation = (contacts: ClientContact[]) => {
+export const useClientCreateMutation = (contacts: ClientContactData[]) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 

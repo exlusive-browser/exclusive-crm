@@ -13,7 +13,7 @@ import {
   handleSubmit
 } from './clientCreateFormUtils';
 
-export interface ClientContact {
+export interface ClientContactData {
   firstName: string;
   lastName: string;
   email: string;
@@ -43,11 +43,13 @@ export function ClientCreateForm() {
     active: false,
   });
 
-  const [contacts, setContacts] = useState<ClientContact[]>([]);
+  const [contacts, setContacts] = useState<ClientContactData[]>([]);
 
   const clientMutation = useClientCreateMutation(contacts);
 
   const isMutationLoading = clientMutation.status === 'pending';
+  const isClientDataIncomplete = Object.values(clientData).some(value => value === '');
+  const isContactDataIncomplete = contacts.some(contact => Object.values(contact).some(value => value === ''));
 
   return (
     <Container
@@ -133,20 +135,33 @@ export function ClientCreateForm() {
         Add Contact
       </Button>
 
-      {/* Create Client Button */}
+      {/* Create Client Button and conditions to enable or disable it*/}
       <Button
         fullWidth
         sx={{
           px: 2,
           mt: 5,
-          backgroundColor: isMutationLoading ? "lightgray" : "primary.light",
-          color: isMutationLoading ? "black" : "white",
+          backgroundColor:
+            isClientDataIncomplete ||
+              isContactDataIncomplete ?
+              "lightgray" : "primary.light",
+          color:
+            isClientDataIncomplete ||
+              isContactDataIncomplete ?
+              "black" : "white",
+
           '&:hover': {
-            backgroundColor: isMutationLoading ? "lightgray" : "primary.dark",
+            backgroundColor:
+              isClientDataIncomplete ||
+                isContactDataIncomplete ?
+                "lightgray" : "primary.dark",
           },
         }}
         onClick={() => handleSubmit(clientData, clientMutation)}
-        disabled={isMutationLoading}
+        disabled={
+          isClientDataIncomplete ||
+          isContactDataIncomplete ||
+          isMutationLoading}
       >
         {isMutationLoading ? 'Creating...' : 'Create'}
       </Button>
