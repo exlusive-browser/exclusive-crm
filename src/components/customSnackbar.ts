@@ -12,3 +12,5 @@ export const SUCCESS_SNACKBAR_OPTIONS: SnackbarOptions = {
   variant: "success",
   anchorOrigin: { vertical: "bottom", horizontal: "right" },
 };
+
+
