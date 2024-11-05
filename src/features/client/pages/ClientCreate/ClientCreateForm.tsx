@@ -6,7 +6,11 @@ import BackIcon from '@mui/icons-material/ChevronLeft';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '../../repositories/clients.repository';
-import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from "notistack";
+import {
+  ERROR_SNACKBAR_OPTIONS,
+  SUCCESS_SNACKBAR_OPTIONS,
+} from "../../../../components/customSnackbar";
 
 interface Contact {
   firstName: string;
@@ -28,7 +32,6 @@ interface ClientData {
 }
 
 export function ClientCreateForm() {
-
   const [clientData, setClientData] = useState<ClientData>({
     nit: '',
     name: '',
@@ -38,18 +41,23 @@ export function ClientCreateForm() {
     phone: '',
     corporateEmail: '',
     active: false,
-    contacts: [{ firstName: '', lastName: '', email: '', phone: '' }],
+    contacts: [],
   });
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const mutation = useMutation({
     mutationFn: createClient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['createClient'] });
-      navigate('/clients');
+      enqueueSnackbar("Client was created successfully", SUCCESS_SNACKBAR_OPTIONS);
+    },
+    onError: () => {
+      enqueueSnackbar("Something went wrong, try again later", ERROR_SNACKBAR_OPTIONS);
     },
   });
+
+  const isMutationLoading = mutation.status === 'pending';
 
   {/* Handle change for contacts */ }
   const handleChange = (field: keyof ClientData, value: string | boolean) => {
@@ -76,7 +84,6 @@ export function ClientCreateForm() {
       contacts: prev.contacts.filter((_, i) => i !== index),
     }));
   };
-
 
   const handleSubmit = () => {
     mutation.mutate(clientData);
@@ -141,23 +148,24 @@ export function ClientCreateForm() {
               <TextField fullWidth label="Phone" variant="outlined" value={contact.phone} onChange={(e) => handleContactChange(index, 'phone', e.target.value)} />
             </Grid>
           </Grid>
-          {clientData.contacts.length > 1 && (
-            <Button
-              variant="outlined"
-              sx={{
-                mt: 2,
-                color: 'red',
-                borderColor: '#ff9494',
-                width: '100%',
+          <Button
+            variant="outlined"
+            sx={{
+              mt: 2,
+              color: 'red',
+              borderColor: '#ff9494',
+              width: '100%',
 
-                '&:hover': {
-                  borderColor: 'red',
-                  backgroundColor: '#fffafa',
-                },
-              }} onClick={() => handleRemoveContact(index)} startIcon={<RemoveIcon />}>
-              Remove
-            </Button>
-          )}
+              '&:hover': {
+                borderColor: 'red',
+                backgroundColor: '#fffafa',
+              },
+            }}
+            onClick={() => handleRemoveContact(index)}
+            startIcon={<RemoveIcon />}
+          >
+            Remove
+          </Button>
         </Box>
       ))}
 
@@ -167,8 +175,22 @@ export function ClientCreateForm() {
       </Button>
 
       {/* Create Client Button */}
-      <Button fullWidth sx={{ px: 2, mt: 5, backgroundColor: "primary.light", color: "white" }} onClick={handleSubmit} disabled={mutation.status === 'pending'}>
-        {mutation.status === 'pending' ? 'Creating...' : 'Create'}
+      <Button
+        fullWidth
+        sx={{
+          px: 2,
+          mt: 5,
+          backgroundColor: isMutationLoading ? "lightgray" : "primary.light",
+          color: isMutationLoading ? "black" : "white",
+
+          '&:hover': {
+            backgroundColor: isMutationLoading ? "lightgray" : "primary.dark",
+          },
+        }}
+        onClick={handleSubmit}
+        disabled={isMutationLoading}
+      >
+        {isMutationLoading ? 'Creating...' : 'Create'}
       </Button>
 
       {mutation.isError && (
