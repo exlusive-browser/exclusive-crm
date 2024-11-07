@@ -1,4 +1,5 @@
 import { axiosClient } from "../../../lib/axios-client";
+import { getRandomId } from "../../../lib/helpers";
 
 export interface RepoClient {
   id: number;
@@ -34,6 +35,7 @@ export async function updateClient(
 }
 
 export async function createClient(clientData: Omit<RepoClient, "id">): Promise<RepoClient> {
-  const response = await axiosClient.post<RepoClient>("/clients", clientData);
+  const id = getRandomId(); 
+  const response = await axiosClient.post<RepoClient>("/clients", { ...clientData, id });
   return response.data;
 }
