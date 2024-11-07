@@ -4,8 +4,9 @@ import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import {
   getClients,
   RepoClient,
+  updateClientStatus
 } from "../../repositories/clients.repository";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
@@ -15,12 +16,21 @@ import { Link } from "react-router-dom";
 export function ClientsTable() {
 
   const columns: GridColDef<RepoClient>[] = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 90, renderCell: (params) => (
+      <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+        {params.value}
+      </Typography>
+    ), },
     {
-        field: "nit",
-        headerName: "NIT",
-        width: 150,
-        editable: false,
+      field: "nit",
+      headerName: "NIT",
+      width: 150,
+      editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "name",
@@ -28,7 +38,7 @@ export function ClientsTable() {
       width: 220,
       editable: false,
       renderCell: (params) => (
-        <Link to={`/clients/${params.row.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link to={`/clients/${params.row.id}`} style={{ color: params.row.active ? 'inherit' : 'red', textDecoration: 'none' }}>
           {params.value}
         </Link>
       ),
@@ -38,41 +48,66 @@ export function ClientsTable() {
       headerName: "Address",
       width: 200,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "city",
       headerName: "City",
       width: 150,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "country",
       headerName: "Country",
       width: 150,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "phone",
       headerName: "Phone",
       width: 180,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "corporateEmail",
       headerName: "Corporate Email",
       width: 250,
       editable: false,
+      renderCell: (params) => (
+        <Typography  variant="body2" style={{ color: params.row.active ? 'inherit' : 'red', lineHeight: "unset"  }}>
+          {params.value}
+        </Typography>
+      ),
     },
     {
-        field: "active",
-        headerName: "Active",
-        width: 120,
-        editable: false,
-        renderCell: (params) => (
-            <Typography style={{ color: params.value ? "inherit" : "red", lineHeight: "unset" }}>
-              {params.value ? "Yes" : "No"}
-            </Typography>
-          ),
+      field: "active",
+      headerName: "Active",
+      width: 120,
+      editable: false,
+      renderCell: (params) => (
+        <Typography style={{ color: params.value ? "inherit" : "red", lineHeight: "unset" }}>
+          {params.value ? "Yes" : "No"}
+        </Typography>
+      ),
     },
     {
       field: "actions",
@@ -101,17 +136,21 @@ export function ClientsTable() {
             // @ts-ignore
             to={`/clients/update/${id}`}
             color="inherit"
+            disabled={!row.active}
           />,
           <GridActionsCellItem
-          icon={row.active ? <ToggleOnIcon /> : <ToggleOffIcon />}
-          label={row.active ? "Inactivate" : "Activate"}
-          className="textPrimary"
-          color="inherit"
-        />
+            icon={row.active ? <ToggleOnIcon /> : <ToggleOffIcon />}
+            label={row.active ? "Inactivate" : "Activate"}
+            onClick={() => handleToggleStatus(row)}
+            className="textPrimary"
+            color="inherit"
+          />
         ];
       },
     },
   ];
+
+  const queryClient = useQueryClient();
 
   const { isPending, isError, data } = useQuery({
     queryKey: ["client"],
@@ -119,6 +158,22 @@ export function ClientsTable() {
   });
   console.log(data);
   const rows = data ? data : [];
+
+
+  const updateStatusMutation = useMutation<RepoClient, Error, { id: number; isActive: boolean }>({
+    mutationFn: updateClientStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['client'] });
+    },
+    onError: (error: Error) => {
+      console.error("Error updating client:", error);
+    }
+  });
+
+  const handleToggleStatus = (client: RepoClient) => {
+    updateStatusMutation.mutate({ id: client.id, isActive: !client.active });
+  };
+
 
   return (
     <>
