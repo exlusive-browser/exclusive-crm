@@ -28,9 +28,29 @@ export const handleAddContact = (contacts: ClientContactData[], setContacts: Rea
   setContacts([...contacts, { firstName: '', lastName: '', email: '', phone: '' }]);
 };
 
-export const handleRemoveContact = (contacts: ClientContactData[], setContacts: React.Dispatch<React.SetStateAction<ClientContactData[]>>, index: number) => {
-  setContacts(contacts.filter((_, i) => i !== index));
+export const handleRemoveContact = (
+  contacts: ClientContactData[],
+  setContacts: React.Dispatch<React.SetStateAction<ClientContactData[]>>,
+  setErrors: React.Dispatch<React.SetStateAction<FormErrors>>,
+  index: number
+) => {
+  // Remove the contact at the specified index
+  const updatedContacts = contacts.filter((_, i) => i !== index);
+  setContacts(updatedContacts);
+
+  // Remove the errors associated with the removed contact
+  setErrors((prevErrors) => {
+    const updatedContactPhones = prevErrors.contactPhones.filter((_, i) => i !== index);
+    const updatedContactEmails = prevErrors.contactEmails.filter((_, i) => i !== index);
+    
+    return {
+      ...prevErrors,
+      contactPhones: updatedContactPhones,
+      contactEmails: updatedContactEmails,
+    };
+  });
 };
+
 
 // Handle Phone and Email Validation
 export const handleClientPhoneChange = (

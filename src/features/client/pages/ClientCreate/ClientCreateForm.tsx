@@ -248,7 +248,7 @@ export function ClientCreateForm() {
                 backgroundColor: '#fffafa',
               },
             }}
-            onClick={() => handleRemoveContact(contacts, setContacts, index)}
+            onClick={() => handleRemoveContact(contacts, setContacts, setErrors, index)}
             startIcon={<RemoveIcon />}
           >
             Remove
