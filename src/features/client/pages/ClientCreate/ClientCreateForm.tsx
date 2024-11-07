@@ -5,12 +5,17 @@ import RemoveIcon from '@mui/icons-material/PersonRemove';
 import BackIcon from '@mui/icons-material/ChevronLeft';
 import { useState } from 'react';
 import {
-  useClientCreateMutation,
   handleClientDataChange,
   handleContactChange,
   handleAddContact,
   handleRemoveContact,
-  handleSubmit
+  handleClientPhoneChange,
+  handleClientEmailChange,
+  handleContactPhoneChange,
+  handleContactEmailChange,
+  isFormValid,
+  handleSubmit,
+  useClientCreateMutation
 } from './clientCreateFormUtils';
 
 export interface ClientContactData {
@@ -48,8 +53,8 @@ export function ClientCreateForm() {
   const clientMutation = useClientCreateMutation(contacts);
 
   const isMutationLoading = clientMutation.status === 'pending';
-  const isClientDataIncomplete = Object.values(clientData).some(value => value === '');
-  const isContactDataIncomplete = contacts.some(contact => Object.values(contact).some(value => value === ''));
+
+  const maxTextLength = 100;
 
   const [errors, setErrors] = useState({
     clientPhone: '',
@@ -57,58 +62,6 @@ export function ClientCreateForm() {
     contactPhones: Array(contacts.length).fill(''),
     contactEmails: Array(contacts.length).fill(''),
   });
-
-  const phoneRegex = /^[0-9]{10}$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; 
-
-  const validatePhone = (phone: string) => phoneRegex.test(phone);
-  const validateEmail = (email: string) => emailRegex.test(email);
-
-  const handleClientPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const phone = e.target.value;
-    handleClientDataChange(setClientData, 'phone', phone);
-    setErrors((prev) => ({
-      ...prev,
-      clientPhone: validatePhone(phone) ? '' : 'Please enter a valid phone number',
-    }));
-  };
-
-  const handleClientEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const email = e.target.value;
-    handleClientDataChange(setClientData, 'corporateEmail', email);
-    setErrors((prev) => ({
-      ...prev,
-      clientEmail: validateEmail(email) ? '' : 'Please enter a valid email address',
-    }));
-  };
-
-  const handleContactPhoneChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const phone = e.target.value;
-    handleContactChange(contacts, setContacts, index, 'phone', phone);
-    setErrors((prev) => {
-      const contactPhones = [...prev.contactPhones];
-      contactPhones[index] = validatePhone(phone) ? '' : 'Please enter a valid phone number';
-      return { ...prev, contactPhones };
-    });
-  };
-
-  const handleContactEmailChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const email = e.target.value;
-    handleContactChange(contacts, setContacts, index, 'email', email);
-    setErrors((prev) => {
-      const contactEmails = [...prev.contactEmails];
-      contactEmails[index] = validateEmail(email) ? '' : 'Please enter a valid email address';
-      return { ...prev, contactEmails };
-    });
-  };
-
-  const isFormValid =
-    !isClientDataIncomplete &&
-    !isContactDataIncomplete &&
-    !errors.clientPhone &&
-    !errors.clientEmail &&
-    !errors.contactPhones.some((error) => error) &&
-    !errors.contactEmails.some((error) => error);
 
   return (
     <Container
@@ -137,11 +90,13 @@ export function ClientCreateForm() {
       <TextField
         fullWidth
         label="NIT"
-        
         variant="outlined"
         margin="normal"
         value={clientData.nit}
         onChange={(e) => handleClientDataChange(setClientData, 'nit', e.target.value)}
+        inputProps={{
+          maxLength: maxTextLength
+        }}
       />
       <TextField
         fullWidth
@@ -150,6 +105,9 @@ export function ClientCreateForm() {
         margin="normal"
         value={clientData.name}
         onChange={(e) => handleClientDataChange(setClientData, 'name', e.target.value)}
+        inputProps={{
+          maxLength: maxTextLength
+        }}
       />
       <TextField
         fullWidth
@@ -158,6 +116,9 @@ export function ClientCreateForm() {
         margin="normal"
         value={clientData.address}
         onChange={(e) => handleClientDataChange(setClientData, 'address', e.target.value)}
+        inputProps={{
+          maxLength: maxTextLength
+        }}
       />
       <TextField
         fullWidth
@@ -166,6 +127,9 @@ export function ClientCreateForm() {
         margin="normal"
         value={clientData.city}
         onChange={(e) => handleClientDataChange(setClientData, 'city', e.target.value)}
+        inputProps={{
+          maxLength: maxTextLength
+        }}
       />
       <TextField
         fullWidth
@@ -174,6 +138,9 @@ export function ClientCreateForm() {
         margin="normal"
         value={clientData.country}
         onChange={(e) => handleClientDataChange(setClientData, 'country', e.target.value)}
+        inputProps={{
+          maxLength: maxTextLength
+        }}
       />
       <TextField
         fullWidth
@@ -181,9 +148,12 @@ export function ClientCreateForm() {
         variant="outlined"
         margin="normal"
         value={clientData.phone}
-        onChange={handleClientPhoneChange}
+        onChange={(e) => handleClientPhoneChange(setClientData, setErrors, e.target.value)}
         error={!!errors.clientPhone}
         helperText={errors.clientPhone}
+        inputProps={{
+          maxLength: maxTextLength
+        }}
       />
       <TextField
         fullWidth
@@ -191,9 +161,12 @@ export function ClientCreateForm() {
         variant="outlined"
         margin="normal"
         value={clientData.corporateEmail}
-        onChange={handleClientEmailChange}
+        onChange={(e) => handleClientEmailChange(setClientData, setErrors, e.target.value)}
         error={!!errors.clientEmail}
         helperText={errors.clientEmail}
+        inputProps={{
+          maxLength: maxTextLength
+        }}
       />
 
       <FormControlLabel
@@ -217,6 +190,9 @@ export function ClientCreateForm() {
                 variant="outlined"
                 value={contact.firstName}
                 onChange={(e) => handleContactChange(contacts, setContacts, index, 'firstName', e.target.value)}
+                inputProps={{
+                  maxLength: maxTextLength
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -226,6 +202,9 @@ export function ClientCreateForm() {
                 variant="outlined"
                 value={contact.lastName}
                 onChange={(e) => handleContactChange(contacts, setContacts, index, 'lastName', e.target.value)}
+                inputProps={{
+                  maxLength: maxTextLength
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -234,9 +213,12 @@ export function ClientCreateForm() {
                 label="Email"
                 variant="outlined"
                 value={contact.email}
-                onChange={(e) => handleContactEmailChange(index, e)}
+                onChange={(e) => handleContactEmailChange(contacts, setContacts, setErrors, index, e.target.value)}
                 error={!!errors.contactEmails[index]}
                 helperText={errors.contactEmails[index]}
+                inputProps={{
+                  maxLength: maxTextLength
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -245,9 +227,12 @@ export function ClientCreateForm() {
                 label="Phone"
                 variant="outlined"
                 value={contact.phone}
-                onChange={(e) => handleContactPhoneChange(index, e)}
+                onChange={(e) => handleContactPhoneChange(contacts, setContacts, setErrors, index, e.target.value)}
                 error={!!errors.contactPhones[index]}
                 helperText={errors.contactPhones[index]}
+                inputProps={{
+                  maxLength: maxTextLength
+                }}
               />
             </Grid>
           </Grid>
@@ -283,17 +268,14 @@ export function ClientCreateForm() {
           px: 2,
           mt: 5,
           mb: { xs: 5, sm: 0 },
-          backgroundColor:
-            isFormValid && !isMutationLoading ? 'primary.light' : 'lightgray',
-          color:
-            isFormValid && !isMutationLoading ? 'white' : 'black',
+          backgroundColor: isFormValid(clientData, contacts, errors, isMutationLoading) ? 'primary.light' : 'lightgray',
+          color: isFormValid(clientData, contacts, errors, isMutationLoading) ? 'white' : 'black',
           '&:hover': {
-            backgroundColor:
-              isFormValid && !isMutationLoading ? 'primary.dark' : 'lightgray',
+            backgroundColor: isFormValid(clientData, contacts, errors, isMutationLoading) ? 'primary.dark' : 'lightgray',
           },
         }}
         onClick={() => handleSubmit(clientData, clientMutation)}
-        disabled={!isFormValid || isMutationLoading}
+        disabled={!isFormValid(clientData, contacts, errors, isMutationLoading)}
       >
         {isMutationLoading ? 'Creating...' : 'Create'}
       </Button>
@@ -306,4 +288,3 @@ export function ClientCreateForm() {
     </Container>
   );
 }
-
