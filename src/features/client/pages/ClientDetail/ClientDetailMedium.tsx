@@ -63,7 +63,7 @@ export function ClientDetailMedium() {
       headerName: "Actions",
       width: 150,
       cellClassName: "actions",
-      getActions: ({ id }) => {
+      getActions: () => {
         return [
           <Button
             component={Link}
