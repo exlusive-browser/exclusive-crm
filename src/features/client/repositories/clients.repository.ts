@@ -13,6 +13,17 @@ export interface RepoClient {
   active: boolean;
 }
 
+export interface RepoOpportunity {
+  id: number;
+  clientId: number;
+  businessName: string;
+  businessType: string;
+  description: string;
+  estimatedValue: number;
+  estimatedStartDate: string;
+  status: string;
+}
+
 export interface updateClientStatusProps {
   id: number;
   active: boolean;
@@ -39,11 +50,11 @@ export async function updateClient(
 }
 
 export async function createClient(clientData: Omit<RepoClient, "id">): Promise<RepoClient> {
-  const id = getRandomId(); 
+  const id = getRandomId();
   const response = await axiosClient.post<RepoClient>("/clients", { ...clientData, id });
   return response.data;
 }
-  
+
 export async function updateClientStatus({ id, isActive }: { id: number, isActive: boolean }): Promise<RepoClient> {
   try {
     const response = await axiosClient.patch<RepoClient>(`/clients/${id}`, {
@@ -55,3 +66,12 @@ export async function updateClientStatus({ id, isActive }: { id: number, isActiv
     throw error;
   }
 }
+
+export async function getOpportunitiesByClientId(clientId: number) {
+  const response = await axiosClient.get<RepoOpportunity[]>(
+    `/opportunities?clientId=${clientId}`
+  );
+  return response.data;
+}
+
+

@@ -26,3 +26,9 @@ export async function getContact(id: number): Promise<RepoClientContact> {
   return response.data;
 }
 
+export async function getContactsByClientId(clientId: number) {
+  const response = await axiosClient.get<RepoClientContact[]>(
+    `/contacts?clientId=${clientId}`
+  );
+  return response.data;
+}
