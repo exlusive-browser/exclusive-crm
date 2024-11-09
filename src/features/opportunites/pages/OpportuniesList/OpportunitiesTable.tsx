@@ -5,18 +5,41 @@ import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import {
   getOpportunities,
   RepoOpportunity,
+  deleteOpportunityWithTracking
 } from "../../repositories/opportunites.repository";
 import { formatCurrency } from "../../../../lib/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { DeleteConfirmationDialog } from "./DeleteConfirmation";
 
 type RowOpportunity = Omit<RepoOpportunity, "clientId">;
 
 export function OpportunitiesTable() {
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  
   const onDelete = (id: number) => {
-    console.log(`Delete opportunity ${id}`);
+    setSelectedId(id);
+    setOpenDeleteDialog(true);
   };
+  
+const handleConfirmDelete = async () => {
+  if (selectedId === null) return;
+
+  try {
+    await deleteOpportunityWithTracking(selectedId);
+
+    setOpenDeleteDialog(false);
+    setSelectedId(null);
+
+    refetch();
+  } catch (error) {
+    console.error("Error deleting opportunity:", error);
+  }
+};
+
 
   const columns: GridColDef<RowOpportunity>[] = [
     { field: "id", headerName: "ID", width: 90 },
@@ -97,7 +120,7 @@ export function OpportunitiesTable() {
     },
   ];
 
-  const { isPending, isError, data } = useQuery({
+  const { isPending, isError, data, refetch } = useQuery({
     queryKey: ["opportunities"],
     queryFn: getOpportunities,
   });
@@ -137,6 +160,11 @@ export function OpportunitiesTable() {
           Oops, something went wrong. We couldn't load the data.
         </Typography>
       )}
+        <DeleteConfirmationDialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </>
   );
 }

@@ -55,3 +55,15 @@ export async function createOpportunity(
   const id = getRandomId();
   await axiosClient.post("/opportunities", { ...data, id, status: "Open" });
 }
+
+
+export const deleteOpportunityWithTracking = async (id: number) => {
+  try {
+    const response = await axiosClient.delete(`/opportunities/${id}`);
+    
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting opportunity with tracking:", error);
+    throw error;
+  }
+};
