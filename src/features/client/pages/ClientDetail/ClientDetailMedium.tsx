@@ -4,9 +4,10 @@ import {
   RepoOpportunity
 } from "../../repositories/clients.repository";
 import { useQuery } from '@tanstack/react-query';
-import { LinearProgress, Box, Typography, Stack, Button } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { LinearProgress, Box, Typography, Stack } from "@mui/material";
+import { useParams } from "react-router-dom";
 import { formatCurrency } from "../../../../lib/helpers";
+import { PrimaryButton } from "../../../../components/buttons";
 
 
 type RowOpportunity = Omit<RepoOpportunity, "clientId">;
@@ -65,14 +66,10 @@ export function ClientDetailMedium() {
       cellClassName: "actions",
       getActions: () => {
         return [
-          <Button
-            component={Link}
-            to={`#`}
-            variant="contained"
-            color="primary"
-          >
+          <PrimaryButton size="small" sx={{ px: 4 }}>
             Seguimiento
-          </Button>,
+          </PrimaryButton>,
+
         ];
       },
     },
