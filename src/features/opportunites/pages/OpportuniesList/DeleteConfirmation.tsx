@@ -9,7 +9,7 @@ interface DeleteConfirmationDialogProps {
 
 export function DeleteConfirmationDialog({ open, onClose, onConfirm }: DeleteConfirmationDialogProps) {
   return (
-    <BaseModal open={open} onClose={onClose}>
+    <BaseModal open={open} onClose={onClose} extraBaseStyles={{ maxWidth: "900px", width: "95%" }}>
       <ModalHeader title="Confirm Deletion" onClose={onClose} />
       <Typography sx={{ mt: 2 }}>
         Are you sure you want to delete this item?

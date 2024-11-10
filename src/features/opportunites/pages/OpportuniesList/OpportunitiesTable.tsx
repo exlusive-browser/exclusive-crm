@@ -8,7 +8,7 @@ import {
   deleteOpportunityWithTracking
 } from "../../repositories/opportunites.repository";
 import { formatCurrency } from "../../../../lib/helpers";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -25,21 +25,28 @@ export function OpportunitiesTable() {
     setOpenDeleteDialog(true);
   };
   
-const handleConfirmDelete = async () => {
-  if (selectedId === null) return;
+  // Usamos useMutation para manejar la mutación de eliminación
+  const { mutateAsync } = useMutation({
+    mutationFn: (id: number) => deleteOpportunityWithTracking(id),
+    onSuccess: () => {
+      setOpenDeleteDialog(false);
+      setSelectedId(null);
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Error deleting opportunity:", error);
+    },
+  });
 
-  try {
-    await deleteOpportunityWithTracking(selectedId);
+  const handleConfirmDelete = async () => {
+    if (selectedId === null) return;
 
-    setOpenDeleteDialog(false);
-    setSelectedId(null);
-
-    refetch();
-  } catch (error) {
-    console.error("Error deleting opportunity:", error);
-  }
-};
-
+    try {
+      await mutateAsync(selectedId);
+    } catch (error) {
+      console.error("Error deleting opportunity:", error);
+    }
+  };
 
   const columns: GridColDef<RowOpportunity>[] = [
     { field: "id", headerName: "ID", width: 90 },
