@@ -5,7 +5,7 @@ import {
 } from "../../repositories/clients.repository";
 import { useQuery } from '@tanstack/react-query';
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { formatCurrency } from "../../../../lib/helpers";
 import { PrimaryButton } from "../../../../components/buttons";
 
@@ -25,6 +25,11 @@ export function ClientDetailMedium() {
       headerName: "Business Name",
       width: 250,
       editable: false,
+      renderCell: (params) => (
+        <Link to={`/opportunities/${params.row.id}`} style={{color: "inherit", textDecoration: "None"}}>
+          {params.value}
+        </Link>
+      )
     },
     {
       field: "businessType",
@@ -66,7 +71,7 @@ export function ClientDetailMedium() {
       cellClassName: "actions",
       getActions: () => {
         return [
-          <PrimaryButton size="small" sx={{ px: 4 }}>
+          <PrimaryButton size="small" sx={{ px: 2 }}>
             Seguimiento
           </PrimaryButton>,
 

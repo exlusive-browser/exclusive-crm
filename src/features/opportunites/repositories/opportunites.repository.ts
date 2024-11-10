@@ -67,3 +67,8 @@ export const deleteOpportunityWithTracking = async (id: number) => {
     throw error;
   }
 };
+
+export const getOpportunityById = async (id: number): Promise<RepoOpportunity> => {
+  const response = await axiosClient.get<RepoOpportunity>(`/opportunities/${id}`);
+  return response.data;
+}

@@ -55,6 +55,11 @@ export function OpportunitiesTable() {
       headerName: "Business Name",
       width: 250,
       editable: false,
+      renderCell: (params) => (
+        <Link to={`/opportunities/${params.row.id}`} style={{color: "inherit", textDecoration: "None"}}>
+          {params.value}
+        </Link>
+      )
     },
     {
       field: "businessType",
