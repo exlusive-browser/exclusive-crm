@@ -8,6 +8,7 @@ import { HomePage } from "../features/home/HomePage";
 import { OpportuniesListPage } from "../features/opportunites/pages/OpportuniesList/OpportuniesListPage";
 import { OpportunitiesCreatePage } from "../features/opportunites/pages/OpportunitiesCreate/OpportunitiesCreatePage";
 import { OpportunityDetailPage } from "../features/opportunites/pages/OpportunityDetail/OpportunityDetailPage";
+import { TrackingListPage } from "../features/tracking/pages/TrackingList/TrackingListPage";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
   {
     path: "/opportunities/create",
     element: <OpportunitiesCreatePage />,
+  },
+  {
+    path: "/tracking",
+    element: <TrackingListPage />,
   },
   {
     path: "*",
