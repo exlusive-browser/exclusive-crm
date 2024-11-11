@@ -1,41 +1,50 @@
-import { getClient, updateClient } from "../../repositories/clients.repository";
+import {
+  getOpportunityById,
+  updateOpportunity,
+} from "../../repositories/opportunites.repository";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
-import { getContactsByClientId } from "../../repositories/contacts.repository";
+import { Dayjs } from "dayjs";
+import { useState } from "react";
 import {
   ERROR_SNACKBAR_OPTIONS,
   SUCCESS_SNACKBAR_OPTIONS,
 } from "../../../../components/customSnackbar";
 import {
-  ClientUpadteunityInput,
-  ClientUpadteunityInputSchema,
-} from "../../entities/client";
+  UpdateOpportunityInput,
+  UpdateOpportunityInputSchema,
+} from "../../entities/opportunity";
 
-interface useUpdateClientProps {
+interface useUpdateOpportuntyProps {
   id: number;
 }
 
-export function useUpdateClient({ id }: useUpdateClientProps) {
+export function useUpdateOpportunity({ id }: useUpdateOpportuntyProps) {
   const { enqueueSnackbar } = useSnackbar();
+  const [startDate, setStartDate] = useState<Dayjs | null>(null)
   const {
     isLoading,
     isError,
     data: Data,
   } = useQuery({
-    queryKey: ["client", id],
-    queryFn: () => getClient(id),
+    queryKey: ["Opportunities", id],
+    queryFn: () => getOpportunityById(id),
   });
+
+  const onStartDateChange = (date: Dayjs | null) => {
+    setStartDate(date);
+  };
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (Data: ClientUpadteunityInput) => updateClient(id, Data),
+    mutationFn: (Data: UpdateOpportunityInput) => updateOpportunity(id, Data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["updateClient"] });
+      queryClient.invalidateQueries({ queryKey: ["updateOpportunity"] });
 
       enqueueSnackbar(
-        "Client was updated successfully",
+        "Opportunity was updated successfully",
         SUCCESS_SNACKBAR_OPTIONS
       );
     },
@@ -50,42 +59,32 @@ export function useUpdateClient({ id }: useUpdateClientProps) {
 
   const isMutationLoading = mutation.status === "pending";
 
-  const { data: contacts } = useQuery({
-    queryKey: ["contacts", id],
-    queryFn: () =>
-      id !== undefined
-        ? getContactsByClientId(id)
-        : Promise.reject("Invalid client ID"),
-    enabled: !!id,
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ClientUpadteunityInput>({
-    resolver: zodResolver(ClientUpadteunityInputSchema),
+  } = useForm<UpdateOpportunityInput>({
+    resolver: zodResolver(UpdateOpportunityInputSchema),
   });
 
-  const onSubmit: SubmitHandler<ClientUpadteunityInput> = async (formData) => {
+  const onSubmit: SubmitHandler<UpdateOpportunityInput> = async (formData) => {
     const dataToUpdate = {
       ...formData,
-      active: Data?.active ?? true,
     };
 
     mutation.mutate(dataToUpdate);
   };
 
   const finalOnSubmit = handleSubmit(onSubmit);
-
   return {
+    Data,
     isLoading,
     isError,
-    Data,
-    isMutationLoading,
-    contacts,
     register,
-    finalOnSubmit,
     errors,
+    startDate,
+    finalOnSubmit,
+    onStartDateChange,
+    isMutationLoading,
   };
 }

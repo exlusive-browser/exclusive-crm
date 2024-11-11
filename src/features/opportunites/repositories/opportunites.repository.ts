@@ -37,7 +37,10 @@ export function fromRepoClientToClientOption(
     name: repoClient.name,
   };
 }
-
+export interface updateClientStatusProps {
+  id: number;
+  active: boolean;
+}
 export async function getOpportunities(): Promise<RepoOpportunity[]> {
   const response = await axiosClient.get<RepoOpportunity[]>("/opportunities");
   return response.data;
@@ -56,11 +59,10 @@ export async function createOpportunity(
   await axiosClient.post("/opportunities", { ...data, id, status: "Open" });
 }
 
-
 export const deleteOpportunityWithTracking = async (id: number) => {
   try {
     const response = await axiosClient.delete(`/opportunities/${id}`);
-    
+
     return response.data;
   } catch (error) {
     console.error("Error deleting opportunity with tracking:", error);
@@ -68,7 +70,22 @@ export const deleteOpportunityWithTracking = async (id: number) => {
   }
 };
 
-export const getOpportunityById = async (id: number): Promise<RepoOpportunity> => {
-  const response = await axiosClient.get<RepoOpportunity>(`/opportunities/${id}`);
+export const getOpportunityById = async (
+  id: number
+): Promise<RepoOpportunity> => {
+  const response = await axiosClient.get<RepoOpportunity>(
+    `/opportunities/${id}`
+  );
+  return response.data;
+};
+
+export async function updateOpportunity(
+  id: number,
+  opportunityData: Omit<RepoOpportunity, "id" | "clientId" | "estimatedStartDate">
+): Promise<RepoOpportunity> {
+  const response = await axiosClient.patch<RepoOpportunity>(
+    `/opportunities/${id}`,
+    opportunityData
+  );
   return response.data;
 }

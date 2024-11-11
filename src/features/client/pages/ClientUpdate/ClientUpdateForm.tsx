@@ -1,9 +1,15 @@
-import { LinearProgress, Box, Typography, Stack } from "@mui/material";
+import {
+  LinearProgress,
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  Stack,
+} from "@mui/material";
 import { TextField } from "../../../../components/TextField";
-import Grid from "@mui/material/Unstable_Grid2";
 import { PrimaryButton } from "../../../../components/buttons";
 import { useUpdateClient } from "./useUpadteClient.ts";
-
+import { RepoClientContact } from "../../repositories/contacts.repository";
 interface ClientUpdateFormProps {
   id: number;
 }
@@ -14,6 +20,7 @@ export function ClientUpdateForm({ id }: ClientUpdateFormProps) {
     isError,
     isMutationLoading,
     Data,
+    contacts,
     register,
     finalOnSubmit: handleSubmit,
     errors,
@@ -147,6 +154,54 @@ export function ClientUpdateForm({ id }: ClientUpdateFormProps) {
             error={!!errors.corporateEmail}
             helperText={errors.corporateEmail?.message}
           />
+
+          {contacts && contacts.length > 0 ? (
+            <Grid container spacing={2}>
+              {contacts.map((contact: RepoClientContact) => (
+                <Grid item xs={12} sm={6} md={4} key={contact.id}>
+                  <Paper elevation={1} sx={{ padding: 2, borderRadius: 1 }}>
+                    <Typography
+                      variant="body1"
+                      sx={{ fontWeight: "bold", color: "primary.light" }}
+                    >
+                      Name:
+                    </Typography>
+                    <Typography variant="body2">
+                      {contact.firstName} {contact.lastName}
+                    </Typography>
+
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "bold",
+                        color: "primary.light",
+                        marginTop: 1,
+                      }}
+                    >
+                      Email:
+                    </Typography>
+                    <Typography variant="body2">{contact.email}</Typography>
+
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "bold",
+                        color: "primary.light",
+                        marginTop: 1,
+                      }}
+                    >
+                      Phone:
+                    </Typography>
+                    <Typography variant="body2">{contact.phone}</Typography>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography variant="body2">
+              No contact information available.
+            </Typography>
+          )}
 
           <PrimaryButton
             type="submit"
