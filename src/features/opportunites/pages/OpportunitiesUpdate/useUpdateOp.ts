@@ -6,8 +6,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
-import { Dayjs } from "dayjs";
-import { useState } from "react";
 import {
   ERROR_SNACKBAR_OPTIONS,
   SUCCESS_SNACKBAR_OPTIONS,
@@ -23,7 +21,6 @@ interface useUpdateOpportuntyProps {
 
 export function useUpdateOpportunity({ id }: useUpdateOpportuntyProps) {
   const { enqueueSnackbar } = useSnackbar();
-  const [startDate, setStartDate] = useState<Dayjs | null>(null)
   const {
     isLoading,
     isError,
@@ -33,9 +30,6 @@ export function useUpdateOpportunity({ id }: useUpdateOpportuntyProps) {
     queryFn: () => getOpportunityById(id),
   });
 
-  const onStartDateChange = (date: Dayjs | null) => {
-    setStartDate(date);
-  };
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -82,9 +76,7 @@ export function useUpdateOpportunity({ id }: useUpdateOpportuntyProps) {
     isError,
     register,
     errors,
-    startDate,
     finalOnSubmit,
-    onStartDateChange,
     isMutationLoading,
   };
 }

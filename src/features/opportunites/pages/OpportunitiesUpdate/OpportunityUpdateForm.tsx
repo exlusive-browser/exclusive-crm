@@ -22,9 +22,7 @@ export function OpportunityUpdateForm({ id }: OpportunityUpdateFormProps) {
     isError,
     isMutationLoading,
     Data,
-    startDate,
     register,
-    onStartDateChange,
     finalOnSubmit: handleSubmit,
     errors,
   } = useUpdateOpportunity({ id });
@@ -63,7 +61,7 @@ export function OpportunityUpdateForm({ id }: OpportunityUpdateFormProps) {
       </Typography>
     );
   }
-  
+
   return (
     <>
       <Box sx={{ height: 600, width: "100%" }}>
@@ -119,8 +117,8 @@ export function OpportunityUpdateForm({ id }: OpportunityUpdateFormProps) {
             error={!!errors.description}
             helperText={errors.description?.message}
           />
-         
-         <TextField
+
+          <TextField
             name="estimatedStartDate"
             label="estimatedStartDate"
             margin="dense"
@@ -135,7 +133,7 @@ export function OpportunityUpdateForm({ id }: OpportunityUpdateFormProps) {
           <FormControl fullWidth margin="dense" error={!!errors.status}>
             <InputLabel>Status</InputLabel>
             <Select
-             // name="status"
+              // name="status"
               label="Status"
               defaultValue={Data.status}
               {...register("status")}
