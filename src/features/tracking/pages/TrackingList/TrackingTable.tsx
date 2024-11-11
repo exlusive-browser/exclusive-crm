@@ -93,7 +93,7 @@ export function TrackingTable() {
             component={Link}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            to={`/monitoring/update/${id}`}
+            to={`/tracking/update/${id}`}
             color="inherit"
           />,
           <GridActionsCellItem
