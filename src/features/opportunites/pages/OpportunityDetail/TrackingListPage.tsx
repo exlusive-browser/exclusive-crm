@@ -29,7 +29,7 @@ export function TrackingListPage() {
             startIcon={<AddIcon />}
             navigateTo="/tracking/create"
           >
-            Create new
+            Create new tracking
           </PrimaryLinkButton>
         </Stack>
         <TrackingTable />

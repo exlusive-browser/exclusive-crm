@@ -1,20 +1,24 @@
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import {
-  getTracking,
-  RepoTracking,
-  deleteTracking
+  deleteTracking,
+  getTrackingByOpId,
+  RepoTracking
 } from "../../repositories/tracking.repository";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Link, useParams } from "react-router-dom";
 import { DeleteConfirmationDialog } from "../../../opportunites/pages/OpportuniesList/DeleteConfirmation";
+import { useState } from "react";
+
 
 type RowTracking = Omit<RepoTracking, "opportunityId">;
 
 export function TrackingTable() {
+  const { id } = useParams();
+  const opportunityId = id ? Number(id) : undefined;
+
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -23,7 +27,6 @@ export function TrackingTable() {
     setOpenDeleteDialog(true);
   };
 
-  // Usamos useMutation para manejar la mutación de eliminación
   const { mutateAsync } = useMutation({
     mutationFn: (id: number) => deleteTracking(id),
     onSuccess: () => {
@@ -42,7 +45,7 @@ export function TrackingTable() {
     try {
       await mutateAsync(selectedId);
     } catch (error) {
-      console.error("Error deleting tracking:", error);
+      console.error("Error deleting tracking", error);
     }
   };
 
@@ -51,7 +54,7 @@ export function TrackingTable() {
     {
       field: "description",
       headerName: "Description",
-      width: 450,
+      width: 500,
       editable: false,
     },
     {
@@ -69,7 +72,7 @@ export function TrackingTable() {
     {
       field: "clientContactId",
       headerName: "Client Contact ID",
-      width: 150,
+      width: 200,
       editable: false,
     },
     {
@@ -84,7 +87,9 @@ export function TrackingTable() {
       headerName: "Actions",
       width: 150,
       cellClassName: "actions",
-      getActions: ({ id }) => {
+      getActions: (params) => {
+        const trackingId = params.id;
+
         return [
           <GridActionsCellItem
             icon={<EditIcon />}
@@ -93,13 +98,13 @@ export function TrackingTable() {
             component={Link}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            to={`/tracking/update/${id}`}
+            to={`/tracking/update/${trackingId}`}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => onDelete(id as number)}
+            onClick={() => onDelete(Number(trackingId))}
             color="inherit"
           />,
         ];
@@ -109,14 +114,14 @@ export function TrackingTable() {
 
   const { isPending, isError, data, refetch } = useQuery({
     queryKey: ["monitoring"],
-    queryFn: getTracking,
+    queryFn: () => (opportunityId !== undefined ? getTrackingByOpId(opportunityId) : Promise.reject("Invalid opportunity ID")),
   });
 
   const rows = data ? data : [];
 
   return (
     <>
-      <Box sx={{ height: 600, width: "100%" }}>
+      <Box sx={{ height: 400, width: "100%", background: "white" }}>
         <DataGrid
           rows={rows}
           columns={columns}
