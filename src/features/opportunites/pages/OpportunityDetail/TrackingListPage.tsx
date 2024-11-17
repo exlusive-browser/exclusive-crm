@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { Container, Stack, Typography } from "@mui/material";
 import { FullPageBox } from "../../../../components/Layout/FullPageBox";
@@ -5,6 +6,9 @@ import { PrimaryLinkButton } from "../../../../components/buttons";
 import { TrackingTable } from "./TrackingTable";
 
 export function TrackingListPage() {
+  const { id } = useParams();
+  const opportunityId = id ? Number(id) : undefined;
+
   return (
     <FullPageBox>
       <Container
@@ -27,7 +31,7 @@ export function TrackingListPage() {
             size="small"
             sx={{ px: 2 }}
             startIcon={<AddIcon />}
-            navigateTo="/tracking/create"
+            navigateTo={`/tracking/create/${opportunityId}`}
           >
             Create new tracking
           </PrimaryLinkButton>
