@@ -29,14 +29,13 @@ export function ClientDetailMedium() {
       prev?.id === opportunity.id ? null : { id: opportunity.id, name: opportunity.businessName }
     );
 
-    // Hacer scroll solo si seleccionamos una oportunidad
     if (!selectedOpportunity || selectedOpportunity.id !== opportunity.id) {
       setTimeout(() => {
         trackingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100); // Un pequeño retraso para asegurar que el estado ha sido actualizado
+      }, 100);
     }
   };
-  
+
   const columns: GridColDef<RowOpportunity>[] = [
     { field: "id", headerName: "ID", width: 90 },
     {
@@ -129,15 +128,18 @@ export function ClientDetailMedium() {
         />
         {selectedOpportunity && (
           <Box
-          ref={trackingRef}
-          sx={{
-            backgroundColor: "white", // Fondo blanco
-            padding: 2, // Espaciado interno opcional
-            borderRadius: 2, // Bordes redondeados opcionales
-            boxShadow: 2, // Sombra opcional para resaltar el Box
-          }}
+            ref={trackingRef}
+            sx={{
+              backgroundColor: "white",
+              padding: 2,
+            }}
           >
-            <Typography variant="h3" sx={{ fontWeight: "bold", marginBottom: 3, color: "primary.dark", paddingLeft: 3}} gutterBottom>
+            <Typography variant="h3" sx={{
+              fontWeight: "bold", marginBottom: 3, color: "primary.dark", paddingLeft: {xs: 2, md: 3},
+              fontSize: {
+                xs: "2rem", md: "2.5rem", xl: "3.5rem",
+              }
+            }} gutterBottom>
               {selectedOpportunity.name}
             </Typography>
             <TrackingListPage opportunityId={selectedOpportunity.id} />
