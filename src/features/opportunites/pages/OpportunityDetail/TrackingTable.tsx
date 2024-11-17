@@ -8,16 +8,17 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DeleteConfirmationDialog } from "../../../opportunites/pages/OpportuniesList/DeleteConfirmation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 type RowTracking = Omit<RepoTracking, "opportunityId">;
+interface TrackingTableProps {
+  opportunityId: number;
+}
 
-export function TrackingTable() {
-  const { id } = useParams();
-  const opportunityId = id ? Number(id) : undefined;
+export function TrackingTable({ opportunityId }: TrackingTableProps) {
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -116,6 +117,12 @@ export function TrackingTable() {
     queryKey: ["monitoring"],
     queryFn: () => (opportunityId !== undefined ? getTrackingByOpId(opportunityId) : Promise.reject("Invalid opportunity ID")),
   });
+
+  useEffect(() => {
+    if (opportunityId) {
+      refetch(); // Forzar refetch cuando cambie opportunityId
+    }
+  }, [opportunityId, refetch]);
 
   const rows = data ? data : [];
 

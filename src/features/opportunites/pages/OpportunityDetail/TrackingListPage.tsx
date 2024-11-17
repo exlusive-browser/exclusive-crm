@@ -4,7 +4,11 @@ import { FullPageBox } from "../../../../components/Layout/FullPageBox";
 import { PrimaryLinkButton } from "../../../../components/buttons";
 import { TrackingTable } from "./TrackingTable";
 
-export function TrackingListPage() {
+interface TrackingTableProps {
+  opportunityId: number;
+}
+
+export function TrackingListPage({ opportunityId }: TrackingTableProps) {
   return (
     <FullPageBox>
       <Container
@@ -32,7 +36,7 @@ export function TrackingListPage() {
             Create new tracking
           </PrimaryLinkButton>
         </Stack>
-        <TrackingTable />
+        <TrackingTable opportunityId={Number(opportunityId)} />
       </Container>
     </FullPageBox>
   );
