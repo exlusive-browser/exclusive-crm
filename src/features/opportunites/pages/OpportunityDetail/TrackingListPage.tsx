@@ -1,14 +1,14 @@
-import { useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { Container, Stack, Typography } from "@mui/material";
 import { FullPageBox } from "../../../../components/Layout/FullPageBox";
 import { PrimaryLinkButton } from "../../../../components/buttons";
 import { TrackingTable } from "./TrackingTable";
 
-export function TrackingListPage() {
-  const { id } = useParams();
-  const opportunityId = id ? Number(id) : undefined;
+interface TrackingTableProps {
+  opportunityId: number;
+}
 
+export function TrackingListPage({ opportunityId }: TrackingTableProps) {
   return (
     <FullPageBox>
       <Container
@@ -36,7 +36,7 @@ export function TrackingListPage() {
             Create new tracking
           </PrimaryLinkButton>
         </Stack>
-        <TrackingTable />
+        <TrackingTable opportunityId={Number(opportunityId)} />
       </Container>
     </FullPageBox>
   );

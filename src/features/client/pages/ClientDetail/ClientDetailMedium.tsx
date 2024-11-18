@@ -4,10 +4,11 @@ import {
   RepoOpportunity
 } from "../../repositories/clients.repository";
 import { useQuery } from '@tanstack/react-query';
-import { LinearProgress, Box, Typography, Stack } from "@mui/material";
+import { LinearProgress, Box, Typography, Stack, Button } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { formatCurrency } from "../../../../lib/helpers";
-import { PrimaryButton } from "../../../../components/buttons";
+import { TrackingListPage } from "../../../opportunites/pages/OpportunityDetail/TrackingListPage";
+import { useRef, useState } from "react";
 
 
 type RowOpportunity = Omit<RepoOpportunity, "clientId">;
@@ -16,7 +17,24 @@ type RowOpportunity = Omit<RepoOpportunity, "clientId">;
 export function ClientDetailMedium() {
   const { id } = useParams();
   const clientId = id ? Number(id) : undefined;
+  const trackingRef = useRef<HTMLDivElement | null>(null);
 
+  const [selectedOpportunity, setSelectedOpportunity] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+
+  const handleTrackingClick = (opportunity: RowOpportunity) => {
+    setSelectedOpportunity((prev) =>
+      prev?.id === opportunity.id ? null : { id: opportunity.id, name: opportunity.businessName }
+    );
+
+    if (!selectedOpportunity || selectedOpportunity.id !== opportunity.id) {
+      setTimeout(() => {
+        trackingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  };
 
   const columns: GridColDef<RowOpportunity>[] = [
     { field: "id", headerName: "ID", width: 90 },
@@ -26,7 +44,7 @@ export function ClientDetailMedium() {
       width: 250,
       editable: false,
       renderCell: (params) => (
-        <Link to={`/opportunities/${params.row.id}`} style={{color: "inherit", textDecoration: "None"}}>
+        <Link to={`/opportunities/${params.row.id}`} style={{ color: "inherit", textDecoration: "None" }}>
           {params.value}
         </Link>
       )
@@ -69,12 +87,18 @@ export function ClientDetailMedium() {
       headerName: "Actions",
       width: 150,
       cellClassName: "actions",
-      getActions: () => {
-        return [
-          <PrimaryButton size="small" sx={{ px: 2 }}>
-            Seguimiento
-          </PrimaryButton>,
+      getActions: (params) => {
+        const opportunity = params.row; // Asegúrate de que `params.row` contiene `id` y `name`.
 
+        return [
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ px: 2 }}
+            onClick={() => handleTrackingClick(opportunity)}
+          >
+            Tracking
+          </Button>,
         ];
       },
     },
@@ -102,7 +126,27 @@ export function ClientDetailMedium() {
           }}
           pageSizeOptions={[5, 10]}
         />
+        {selectedOpportunity && (
+          <Box
+            ref={trackingRef}
+            sx={{
+              backgroundColor: "white",
+              padding: 2,
+            }}
+          >
+            <Typography variant="h3" sx={{
+              fontWeight: "bold", marginBottom: 3, color: "primary.dark", paddingLeft: {xs: 2, md: 3},
+              fontSize: {
+                xs: "2rem", md: "2.5rem", xl: "3.5rem",
+              }
+            }} gutterBottom>
+              {selectedOpportunity.name}
+            </Typography>
+            <TrackingListPage opportunityId={selectedOpportunity.id} />
+          </Box>
+        )}
       </Box>
+
       {isPending && (
         <Stack sx={{ width: "100%", mt: 4 }}>
           <LinearProgress />
