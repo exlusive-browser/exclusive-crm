@@ -9,7 +9,7 @@ import { OpportuniesListPage } from "../features/opportunites/pages/OpportuniesL
 import { OpportunitiesCreatePage } from "../features/opportunites/pages/OpportunitiesCreate/OpportunitiesCreatePage";
 import { OpportunityDetailPage } from "../features/opportunites/pages/OpportunityDetail/OpportunityDetailPage";
 import { OpportunityUpdatePage } from "../features/opportunites/pages/OpportunitiesUpdate/OpportunityPage";
-
+import { TrackingCreatePage } from "../features/tracking/pages/CreateTrackingPage";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -46,6 +46,10 @@ export const router = createBrowserRouter([
   {
     path: "/opportunities/update/:id",
     element: <OpportunityUpdatePage />,
+  },
+  {
+    path: "/tracking/create/:id",
+    element: <TrackingCreatePage />,
   },
   {
     path: "*",
