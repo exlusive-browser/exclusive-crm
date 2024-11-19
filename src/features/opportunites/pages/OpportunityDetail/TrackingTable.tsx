@@ -120,7 +120,7 @@ export function TrackingTable({ opportunityId }: TrackingTableProps) {
 
   useEffect(() => {
     if (opportunityId) {
-      refetch(); // Forzar refetch cuando cambie opportunityId
+      refetch();
     }
   }, [opportunityId, refetch]);
 

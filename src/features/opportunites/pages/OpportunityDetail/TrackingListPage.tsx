@@ -28,7 +28,7 @@ export function TrackingListPage({ opportunityId, showButton = true }: TrackingT
           >
             Tracking
           </Typography>
-          {showButton && ( // Renderizar el botón solo si `showButton` es true
+          {showButton && (
             <PrimaryLinkButton
               size="small"
               sx={{ px: 2 }}
