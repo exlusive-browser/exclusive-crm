@@ -6,9 +6,10 @@ import { TrackingTable } from "./TrackingTable";
 
 interface TrackingTableProps {
   opportunityId: number;
+  showButton?: boolean;
 }
 
-export function TrackingListPage({ opportunityId }: TrackingTableProps) {
+export function TrackingListPage({ opportunityId, showButton = true }: TrackingTableProps) {
   return (
     <FullPageBox>
       <Container
@@ -27,14 +28,16 @@ export function TrackingListPage({ opportunityId }: TrackingTableProps) {
           >
             Tracking
           </Typography>
-          <PrimaryLinkButton
-            size="small"
-            sx={{ px: 2 }}
-            startIcon={<AddIcon />}
-            navigateTo={`/tracking/create/${opportunityId}`}
-          >
-            Create new tracking
-          </PrimaryLinkButton>
+          {showButton && ( // Renderizar el botón solo si `showButton` es true
+            <PrimaryLinkButton
+              size="small"
+              sx={{ px: 2 }}
+              startIcon={<AddIcon />}
+              navigateTo={`/tracking/create/${opportunityId}`}
+            >
+              Create new tracking
+            </PrimaryLinkButton>
+          )}
         </Stack>
         <TrackingTable opportunityId={Number(opportunityId)} />
       </Container>

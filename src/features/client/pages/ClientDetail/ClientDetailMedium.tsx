@@ -142,7 +142,7 @@ export function ClientDetailMedium() {
             }} gutterBottom>
               {selectedOpportunity.name}
             </Typography>
-            <TrackingListPage opportunityId={selectedOpportunity.id} />
+            <TrackingListPage opportunityId={selectedOpportunity.id} showButton = {false}  />
           </Box>
         )}
       </Box>
