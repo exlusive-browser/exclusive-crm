@@ -63,7 +63,7 @@ export function ClientUpdateForm({ id }: ClientUpdateFormProps) {
 
   return (
     <>
-      <Box sx={{ height: 600, width: "100%" }}>
+      <Box sx={{ width: "100%" }}>
         <Grid
           container
           spacing={2}
