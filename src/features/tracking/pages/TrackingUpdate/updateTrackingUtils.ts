@@ -9,111 +9,107 @@ import {
 
 import { z } from "zod";
 import { axiosClient } from "../../../../lib/axios-client";
-import { RepoTracking, updateTracking } from "../../repositories/tracking.repository";
+import { getClientContactsOptionsByClientId, getClientIdByOpId, RepoClientContact, RepoTracking, updateTracking } from "../../repositories/tracking.repository";
+import { useEffect } from "react";
+import { UpdateTrackingActivityInputSchema } from "../../entities/tracking";
+import { useParams } from "react-router-dom";
 
-
-export const CreateTrackingInputSchema = z.object({
-  desctiption: z
-    .string()
-    .min(1, "Description is required"),
-  salesExecutive: z
-    .string()
-    .min(1, "Description is required"),
-  clientContactId: z.coerce
-    .number({ message: "Contact ID must be a number" })
-    .nonnegative("Contact ID must be positive"),
-});
-
-export const UpdateTrackingInputSchema = z.object({
-  description: z
-    .string()
-    .min(1, "Description is required"),
-  salesExecutive: z
-    .string()
-    .min(1, "Sales executive is required"),
-  contactDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
-    message: "Contact date must be a valid date",
-  }),
-  contactType: z.enum(["Phone Call", "Video Call", "Email", "In-Person Meeting"]),
-  opportunityId: z.number(),
-  clientContactId: z.coerce
-    .number({ message: "Contact ID must be a number" })
-    .nonnegative("Contact ID must be positive")
-    .min(1, "Contact ID is required"),
-});
-
-export type CreateTrackingInput = z.infer<
-  typeof CreateTrackingInputSchema
->;
-
-export type UpdateTrackingInput = z.infer<
-  typeof UpdateTrackingInputSchema
->;
+export type UpdateTrackingInput = z.infer<typeof UpdateTrackingActivityInputSchema>;
 
 interface useUpdateTrackingProps {
   id: number;
+  opportunityId: number;
 }
 
-export const getTrackingById = async (
-  id: number
-): Promise<RepoTracking> => {
-  const response = await axiosClient.get<RepoTracking>(
-    `/monitoring/${id}`
-  );
+// Función auxiliar para mapear las opciones de `clientContact`
+function getClientContactsSelectOptions(options: RepoClientContact[]) {
+  return options.map((option) => ({
+    text: `${option.firstName} ${option.lastName}`,
+    value: option.id,
+  }));
+}
+
+// Función asíncrona para obtener datos de tracking por ID
+export const getTrackingById = async (id: number): Promise<RepoTracking> => {
+  const response = await axiosClient.get<RepoTracking>(`/monitoring/${id}`);
   return response.data;
 };
 
-export function useUpdateTracking({ id }: useUpdateTrackingProps) {
+export function useUpdateTracking({ id, opportunityId }: useUpdateTrackingProps) {
+  // const { ida } = useParams();
+  // const opportunityId = ida ? Number(ida) : undefined;
   const { enqueueSnackbar } = useSnackbar();
-  const {
-    isLoading,
-    isError,
-    data: Data,
-  } = useQuery({
+  const queryClient = useQueryClient();
+
+  // Query para obtener los datos iniciales de tracking
+  const { isLoading, isError, data: Data } = useQuery({
     queryKey: ["Tracking", id],
     queryFn: () => getTrackingById(id),
   });
 
+  // Query para obtener `clientId` basado en `opportunityId`
+  const { data: clientId } = useQuery({
+    queryKey: ['opportunity-client', opportunityId],
+    queryFn: () => opportunityId !== undefined ? getClientIdByOpId(opportunityId) : Promise.reject("Invalid opportunity ID"),
+    enabled: !!opportunityId,
+  });
+  
+  // Query para obtener `clientContactOptions` usando `clientId`
+  const { data: clientContactOptions = [], isLoading: isLoadingClientContacts } = useQuery({
+    queryKey: ['clientContact-options', clientId],
+    queryFn: () => clientId !== undefined ? getClientContactsOptionsByClientId(clientId) : Promise.reject("Invalid client ID"),
+    select: getClientContactsSelectOptions,
+    enabled: !!clientId,
+  });
 
-  const queryClient = useQueryClient();
+  // Mutación para actualizar datos de tracking
   const mutation = useMutation({
-    mutationFn: (Data: UpdateTrackingInput) => updateTracking(id, Data),
+    mutationFn: (dataToUpdate: UpdateTrackingInput) => updateTracking(id, dataToUpdate),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["updateTracking"] });
-
-      enqueueSnackbar(
-        "Tracking updated successfully",
-        SUCCESS_SNACKBAR_OPTIONS
-      );
+      queryClient.invalidateQueries({ queryKey: ["Tracking", id] });
+      enqueueSnackbar("Tracking updated successfully", SUCCESS_SNACKBAR_OPTIONS);
     },
     onError: (error) => {
-      console.log(error);
-      enqueueSnackbar(
-        "Sorry, something went wrong, try again later",
-        ERROR_SNACKBAR_OPTIONS
-      );
+      console.error("Mutation error:", error);
+      enqueueSnackbar("Sorry, something went wrong, try again later", ERROR_SNACKBAR_OPTIONS);
     },
   });
 
-  const isMutationLoading = mutation.status === "pending";
+  const isMutationLoading = mutation.status === 'pending';
 
+  // Configuración del formulario con validación zod
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<UpdateTrackingInput>({
-    resolver: zodResolver(UpdateTrackingInputSchema),
+    resolver: zodResolver(UpdateTrackingActivityInputSchema),
+    defaultValues: {
+      description: Data?.description,
+      salesExecutive: Data?.salesExecutive,
+      clientContactId: Data?.clientContactId,
+      contactDate: Data?.contactDate,
+      contactType: Data?.contactType,
+      opportunityId: opportunityId,
+    },
   });
 
-  const onSubmit: SubmitHandler<UpdateTrackingInput> = async (formData) => {
-    const dataToUpdate = {
-      ...formData,
-    };
+  // Efecto para actualizar el valor de `contactType` cuando `Data` esté disponible
+  useEffect(() => {
+    if (Data?.contactType) {
+      setValue("contactType", Data.contactType);
+    }
+  }, [Data, setValue]);
 
-    mutation.mutate(dataToUpdate);
+  // Función de envío del formulario
+  const onSubmit: SubmitHandler<UpdateTrackingInput> = async (formData) => {
+    console.log("Data to submit:", formData);
+    mutation.mutate(formData);
   };
 
   const finalOnSubmit = handleSubmit(onSubmit);
+
   return {
     Data,
     isLoading,
@@ -121,6 +117,8 @@ export function useUpdateTracking({ id }: useUpdateTrackingProps) {
     register,
     errors,
     finalOnSubmit,
+    clientContactOptions,
+    isLoadingClientContacts,
     isMutationLoading,
   };
 }

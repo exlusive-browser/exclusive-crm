@@ -12,20 +12,24 @@ import {
 } from "@mui/material";
 import { TextField } from "../../../../components/TextField";
 import { PrimaryButton } from "../../../../components/buttons";
+
 interface TrackingUpdateFormProps {
     id: number;
+    opportunityId: number;
 }
 
-export function TrackingUpdateForm({ id }: TrackingUpdateFormProps) {
+export function TrackingUpdateForm({ id, opportunityId }: TrackingUpdateFormProps) {
     const {
         isLoading,
         isError,
         isMutationLoading,
+        clientContactOptions,
+        isLoadingClientContacts,
         Data,
         register,
         finalOnSubmit: handleSubmit,
         errors,
-    } = useUpdateTracking({ id });
+    } = useUpdateTracking({ id, opportunityId  });
 
     if (isLoading) {
         return (
@@ -63,94 +67,106 @@ export function TrackingUpdateForm({ id }: TrackingUpdateFormProps) {
     }
 
     return (
-        <>
-            <Box sx={{ height: 600, width: "100%" }}>
-                <Grid
-                    container
-                    spacing={2}
-                    sx={{ backgroundColor: "background.paper", p: 2 }}
-                    component="form"
-                    onSubmit={handleSubmit}
-                >
-                    <TextField
-                        name="description"
-                        label="Description"
-                        margin="dense"
-                        defaultValue={Data.description}
-                        inputProps={{
-                            ...register("description"),
-                        }}
-                        error={!!errors.description}
-                        helperText={errors.description?.message}
-                    />
+        <Box sx={{ height: 600, width: "100%" }}>
+            <Grid
+                container
+                spacing={2}
+                sx={{ backgroundColor: "background.paper", p: 2 }}
+                component="form"
+                onSubmit={handleSubmit}
+            >
+                <TextField
+                    name="description"
+                    label="Description"
+                    margin="dense"
+                    defaultValue={Data.description}
+                    inputProps={{
+                        ...register("description"),
+                    }}
+                    error={!!errors.description}
+                    helperText={errors.description?.message}
+                />
 
-                    <TextField
-                        name="clientContactId"
-                        label="Client Contact ID"
-                        margin="dense"
-                        defaultValue={Data.clientContactId}
-                        inputProps={{
-                            ...register("clientContactId"),
-                        }}
-                        error={!!errors.clientContactId}
-                        helperText={errors.clientContactId?.message}
-                    />
-
-                    <TextField
-                        name="salesExecutive"
-                        label="Sales Executive"
-                        margin="dense"
-                        defaultValue={Data.salesExecutive}
-                        inputProps={{
-                            ...register("salesExecutive"),
-                        }}
-                        error={!!errors.salesExecutive}
-                        helperText={errors.salesExecutive?.message}
-                    />
-
-                    <TextField
-                        name="contactDate"
-                        label="Contact Date"
-                        margin="dense"
-                        defaultValue={Data.contactDate}
-                        inputProps={{
-                            ...register("contactDate"),
-                        }}
-                        error={!!errors.contactDate}
-                        helperText={errors.contactDate?.message}
-                    />
-
-                    <FormControl fullWidth margin="dense" error={!!errors.contactType}>
-                        <InputLabel>Contact Type</InputLabel>
+                {isLoadingClientContacts ? (
+                    <Typography>Loading client contacts...</Typography>
+                ) : (
+                    <FormControl fullWidth margin="dense">
+                        <InputLabel>Client Contact</InputLabel>
                         <Select
-                            label="Contact Type"
-                            defaultValue={Data.contactType}
-                            {...register("contactType")}
+                            label="Client Contact"
+                            defaultValue="" // Valor inicial vacío
+                            {...register("clientContactId", {
+                                required: "Client contact is required",
+                            })}
+                            error={!!errors.clientContactId}
                         >
-                            <MenuItem value="In-Person Meeting">
-                                In-Person Meeting
-                            </MenuItem>
-                            <MenuItem value="Phone Call">Phone Call</MenuItem>
-                            <MenuItem value="Video Call">Video Call</MenuItem>
-                            <MenuItem value="Email">Email</MenuItem>
+                            {clientContactOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.text}
+                                </MenuItem>
+                            ))}
                         </Select>
-                        {errors.contactType && (
+                        {errors.clientContactId && (
                             <Typography variant="caption" color="error">
-                                {errors.contactType.message}
+                                {errors.clientContactId.message?.toString()}
                             </Typography>
                         )}
                     </FormControl>
+                )}
 
-                    <PrimaryButton
-                        type="submit"
-                        fullWidth
-                        sx={{ marginTop: 2 }}
-                        disabled={isMutationLoading}
+                <TextField
+                    name="salesExecutive"
+                    label="Sales Executive"
+                    margin="dense"
+                    defaultValue={Data.salesExecutive}
+                    inputProps={{
+                        ...register("salesExecutive"),
+                    }}
+                    error={!!errors.salesExecutive}
+                    helperText={errors.salesExecutive?.message}
+                />
+
+                <TextField
+                    name="contactDate"
+                    label="Contact Date"
+                    margin="dense"
+                    defaultValue={Data.contactDate}
+                    inputProps={{
+                        ...register("contactDate"),
+                    }}
+                    error={!!errors.contactDate}
+                    helperText={errors.contactDate?.message}
+                />
+
+                <FormControl fullWidth margin="dense" error={!!errors.contactType}>
+                    <InputLabel>Contact Type</InputLabel>
+                    <Select
+                        label="Contact Type"
+                        defaultValue={Data.contactType}
+                        {...register("contactType")}
                     >
-                        {isMutationLoading ? "Submitting..." : "Submit"}
-                    </PrimaryButton>
-                </Grid>
-            </Box>
-        </>
+                        <MenuItem value="In-Person Meeting">
+                            In-Person Meeting
+                        </MenuItem>
+                        <MenuItem value="Phone Call">Phone Call</MenuItem>
+                        <MenuItem value="Email">Email</MenuItem>
+                    </Select>
+                    {errors.contactType && (
+                        <Typography variant="caption" color="error">
+                            {errors.contactType.message}
+                        </Typography>
+                    )}
+                </FormControl>
+
+                <PrimaryButton
+                    type="submit"
+                    fullWidth
+                    sx={{ marginTop: 2 }}
+                    disabled={isMutationLoading}
+                >
+                    {isMutationLoading ? "Submitting..." : "Submit"}
+                </PrimaryButton>
+            </Grid>
+        </Box>
     );
 }

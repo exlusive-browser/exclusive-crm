@@ -49,6 +49,11 @@ export async function createTracking(clientData: Omit<RepoTracking, "id">): Prom
     return response.data;
 }
 
+export async function getOpIdByTrackingId(id: number){
+    const response = await axiosClient.get<RepoTracking>(`/monitoring/${id}`)
+    return response.data.opportunityId
+}
+
 export async function getTrackingByOpId(opportunityId: number) {
     const response = await axiosClient.get<RepoTracking[]>(
         `/monitoring?opportunityId=${opportunityId}`
