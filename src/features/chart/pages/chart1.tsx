@@ -1,5 +1,4 @@
 import { Paper, Typography, Box } from "@mui/material";
-import { FullPageBox } from "../../../components/Layout/FullPageBox";
 import { model } from "../logics/models";
 import {
   BarChart,
@@ -10,7 +9,6 @@ import {
   Legend,
   Bar,
 } from "recharts";
-import { Height } from "@mui/icons-material";
 
 export function Chart1() {
   const { clientsWithOpportunities } = model();

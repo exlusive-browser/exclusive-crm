@@ -1,18 +1,6 @@
 import { Paper, Typography, Box } from "@mui/material";
-import { FullPageBox } from "../../../components/Layout/FullPageBox";
 import { model } from "../logics/models";
-import {
-  BarChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  Bar,
-  Cell,
-  Pie,
-  PieChart,
-} from "recharts";
+import { Tooltip, Legend, Cell, Pie, PieChart } from "recharts";
 
 export function Chart3() {
   const { opportunitiesByBusinessType } = model();
@@ -21,7 +9,6 @@ export function Chart3() {
     return <div>Loading...</div>;
   }
 
-  const chartWidth = Math.max(1200, opportunitiesByBusinessType.length * 100);
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
   return (
     <Paper

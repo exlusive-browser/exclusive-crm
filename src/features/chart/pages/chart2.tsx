@@ -1,18 +1,6 @@
 import { Paper, Typography, Box } from "@mui/material";
-import { FullPageBox } from "../../../components/Layout/FullPageBox";
 import { model } from "../logics/models";
-import {
-  BarChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  Bar,
-  Cell,
-  Pie,
-  PieChart,
-} from "recharts";
+import { Tooltip, Legend, Cell, Pie, PieChart } from "recharts";
 
 export function Chart2() {
   const { opportunitiesByStatus } = model();
