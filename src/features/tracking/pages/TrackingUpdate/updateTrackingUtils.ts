@@ -12,7 +12,6 @@ import { axiosClient } from "../../../../lib/axios-client";
 import { getClientContactsOptionsByClientId, getClientIdByOpId, RepoClientContact, RepoTracking, updateTracking } from "../../repositories/tracking.repository";
 import { useEffect } from "react";
 import { UpdateTrackingActivityInputSchema } from "../../entities/tracking";
-import { useParams } from "react-router-dom";
 
 export type UpdateTrackingInput = z.infer<typeof UpdateTrackingActivityInputSchema>;
 
