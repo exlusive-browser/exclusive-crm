@@ -2,50 +2,23 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
-import {
-  getOpportunities,
-  RepoOpportunity,
-  deleteOpportunityWithTracking
-} from "../../repositories/opportunites.repository";
+import { RepoOpportunity } from "../../repositories/opportunites.repository";
 import { formatCurrency } from "../../../../lib/helpers";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { DeleteConfirmationDialog } from "./DeleteConfirmation";
+import { useOpportunities } from "../../hooks/useOpportunities";
 
 type RowOpportunity = Omit<RepoOpportunity, "clientId">;
 
 export function OpportunitiesTable() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  
+
   const onDelete = (id: number) => {
     setSelectedId(id);
     setOpenDeleteDialog(true);
-  };
-  
-  // Usamos useMutation para manejar la mutación de eliminación
-  const { mutateAsync } = useMutation({
-    mutationFn: (id: number) => deleteOpportunityWithTracking(id),
-    onSuccess: () => {
-      setOpenDeleteDialog(false);
-      setSelectedId(null);
-      refetch();
-    },
-    onError: (error) => {
-      console.error("Error deleting opportunity:", error);
-    },
-  });
-
-  const handleConfirmDelete = async () => {
-    if (selectedId === null) return;
-
-    try {
-      await mutateAsync(selectedId);
-    } catch (error) {
-      console.error("Error deleting opportunity:", error);
-    }
   };
 
   const columns: GridColDef<RowOpportunity>[] = [
@@ -56,10 +29,13 @@ export function OpportunitiesTable() {
       width: 250,
       editable: false,
       renderCell: (params) => (
-        <Link to={`/opportunities/${params.row.id}`} style={{color: "inherit", textDecoration: "None"}}>
+        <Link
+          to={`/opportunities/${params.row.id}`}
+          style={{ color: "inherit", textDecoration: "None" }}
+        >
           {params.value}
         </Link>
-      )
+      ),
     },
     {
       field: "businessType",
@@ -132,10 +108,7 @@ export function OpportunitiesTable() {
     },
   ];
 
-  const { isPending, isError, data, refetch } = useQuery({
-    queryKey: ["opportunities"],
-    queryFn: getOpportunities,
-  });
+  const { isPending, isError, data } = useOpportunities();
 
   const rows = data ? data : [];
 
@@ -172,10 +145,10 @@ export function OpportunitiesTable() {
           Oops, something went wrong. We couldn't load the data.
         </Typography>
       )}
-        <DeleteConfirmationDialog
+      <DeleteConfirmationDialog
         open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
-        onConfirm={handleConfirmDelete}
+        selectedId={selectedId}
       />
     </>
   );
