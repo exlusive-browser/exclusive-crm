@@ -37,7 +37,7 @@ const Subheader: React.FC = () => {
             justifyContent: { xs: "flex-start", sm: "space-between" },
           }}
         >
-          {["Clients", "Opportunities", "Tracking", "charts"].map((item) => (
+          {["Clients", "Opportunities", "Charts"].map((item) => (
             <Link
               key={item}
               onClick={() => handleMenuClick(item)}
