@@ -5,6 +5,7 @@ import { FullPageBox } from "../../../components/Layout/FullPageBox";
 import { PrimaryLinkButton } from "../../../components/buttons";
 import { Chart1 } from "./chart1";
 import { Chart2 } from "./chart2";
+import { Chart3 } from "./chart3";
 
 export function ChartsPage() {
   return (
@@ -12,7 +13,7 @@ export function ChartsPage() {
       <Paper
         elevation={3}
         sx={{
-          margin: 2,
+          margin: 1,
           borderRadius: 2,
           px: 5,
           display: "flex",
@@ -40,6 +41,7 @@ export function ChartsPage() {
         </Typography>
         <Chart1 />
         <Chart2 />
+        <Chart3 />
       </Paper>
     </FullPageBox>
   );

@@ -70,10 +70,33 @@ export function model() {
     return [];
   }, [opportunities.isSuccess, opportunities.data]);
 
+  const opportunitiesByBusinessType = React.useMemo(() => {
+    if (opportunities.isSuccess) {
+      const totalOpportunities = opportunities.data.length;
+
+      const businessTypeCount = opportunities.data.reduce(
+        (acc: { [key: string]: number }, opportunity) => {
+          const businessType = opportunity.businessType;
+
+          acc[businessType] = (acc[businessType] || 0) + 1;
+          return acc;
+        },
+        {}
+      );
+
+      return Object.entries(businessTypeCount).map(([businessType, count]) => ({
+        name: businessType,
+        value: Math.round((count / totalOpportunities) * 100 * 100) / 100,
+      }));
+    }
+    return [];
+  }, [opportunities.isSuccess, opportunities.data]);
+
   return {
     clients,
     clientsWithOpportunities,
     opportunities,
     opportunitiesByStatus,
+    opportunitiesByBusinessType,
   };
 }

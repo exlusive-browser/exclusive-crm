@@ -14,14 +14,14 @@ import {
   PieChart,
 } from "recharts";
 
-export function Chart2() {
-  const { opportunitiesByStatus } = model();
+export function Chart3() {
+  const { opportunitiesByBusinessType } = model();
 
-  if (!opportunitiesByStatus.length) {
+  if (!opportunitiesByBusinessType.length) {
     return <div>Loading...</div>;
   }
 
-  const chartWidth = Math.max(1200, opportunitiesByStatus.length * 100);
+  const chartWidth = Math.max(1200, opportunitiesByBusinessType.length * 100);
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
   return (
     <Paper
@@ -45,8 +45,9 @@ export function Chart2() {
           fontSize: { xs: 28, lg: 36 },
         }}
       >
-        Charts Opportunities
+        Opportunities by Business Type (Percentage)
       </Typography>
+
       <Box
         sx={{
           display: "flex",
@@ -55,16 +56,16 @@ export function Chart2() {
           width: "100%",
         }}
       >
-        <PieChart width={chartWidth} height={400}>
+        <PieChart width={400} height={600}>
           <Pie
-            data={opportunitiesByStatus}
+            data={opportunitiesByBusinessType}
             cx="50%"
             cy="50%"
-            label={(entry) => `${entry.name} (${entry.value})`}
+            label={(entry) => ` ${entry.value}%`}
             outerRadius={150}
             dataKey="value"
           >
-            {opportunitiesByStatus.map((entry, index) => (
+            {opportunitiesByBusinessType.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
