@@ -2,16 +2,15 @@ import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import {
   deleteTracking,
   getTrackingByOpId,
-  RepoTracking
+  RepoTracking,
 } from "../../repositories/tracking.repository";
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { LinearProgress, Box, Typography, Stack } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
-import { DeleteConfirmationDialog } from "../../../opportunites/pages/OpportuniesList/DeleteConfirmation";
 import { useEffect, useState } from "react";
-
+import { TrackingDeleteConfirmationDialog } from "./TrackingDeleteDialog";
 
 type RowTracking = Omit<RepoTracking, "opportunityId">;
 interface TrackingTableProps {
@@ -19,7 +18,6 @@ interface TrackingTableProps {
 }
 
 export function TrackingTable({ opportunityId }: TrackingTableProps) {
-
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -115,7 +113,10 @@ export function TrackingTable({ opportunityId }: TrackingTableProps) {
 
   const { isPending, isError, data, refetch } = useQuery({
     queryKey: ["monitoring"],
-    queryFn: () => (opportunityId !== undefined ? getTrackingByOpId(opportunityId) : Promise.reject("Invalid opportunity ID")),
+    queryFn: () =>
+      opportunityId !== undefined
+        ? getTrackingByOpId(opportunityId)
+        : Promise.reject("Invalid opportunity ID"),
   });
 
   useEffect(() => {
@@ -159,7 +160,7 @@ export function TrackingTable({ opportunityId }: TrackingTableProps) {
           Oops, something went wrong. We couldn't load the data.
         </Typography>
       )}
-      <DeleteConfirmationDialog
+      <TrackingDeleteConfirmationDialog
         open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
         onConfirm={handleConfirmDelete}
