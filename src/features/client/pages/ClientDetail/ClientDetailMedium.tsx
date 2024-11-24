@@ -113,7 +113,7 @@ export function ClientDetailMedium() {
 
   return (
     <>
-      <Box sx={{ height: 400, width: "100%", background: "white" }}>
+      <Box sx={{ width: "100%", background: "white" }}>
         <DataGrid
           rows={rows}
           columns={columns}

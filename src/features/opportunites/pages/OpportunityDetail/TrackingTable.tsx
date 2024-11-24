@@ -16,9 +16,10 @@ import { useEffect, useState } from "react";
 type RowTracking = Omit<RepoTracking, "opportunityId">;
 interface TrackingTableProps {
   opportunityId: number;
+  showButton?: boolean;
 }
 
-export function TrackingTable({ opportunityId }: TrackingTableProps) {
+export function TrackingTable({ opportunityId, showButton = true }: TrackingTableProps) {
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -82,35 +83,41 @@ export function TrackingTable({ opportunityId }: TrackingTableProps) {
       width: 150,
       editable: false,
     },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
-      width: 150,
-      cellClassName: "actions",
-      getActions: (params) => {
-        const trackingId = params.id;
-
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            component={Link}
+    ...(showButton
+      ? [
+          {
+            field: "actions",
+            type: "actions" as const,
+            headerName: "Actions",
+            width: 150,
+            cellClassName: "actions",
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            to={`/tracking/update/${trackingId}`}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => onDelete(Number(trackingId))}
-            color="inherit"
-          />,
-        ];
-      },
-    },
+            getActions: (params) => {
+              const trackingId = params.id;
+    
+              return [
+                <GridActionsCellItem
+                  icon={<EditIcon />}
+                  label="Edit"
+                  className="textPrimary"
+                  component={Link}
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  to={`/tracking/update/${trackingId}`}
+                  color="inherit"
+                />,
+                <GridActionsCellItem
+                  icon={<DeleteIcon />}
+                  label="Delete"
+                  onClick={() => onDelete(Number(trackingId))}
+                  color="inherit"
+                />,
+              ];
+            },
+          },
+        ]
+      : []),
   ];
 
   const { isPending, isError, data, refetch } = useQuery({
