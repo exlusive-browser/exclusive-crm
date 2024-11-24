@@ -52,7 +52,7 @@ export function Chart2() {
             outerRadius={150}
             dataKey="value"
           >
-            {opportunitiesByStatus.map((entry, index) => (
+            {opportunitiesByStatus.map((_entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
