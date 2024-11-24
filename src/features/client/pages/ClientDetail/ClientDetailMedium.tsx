@@ -137,7 +137,7 @@ export function ClientDetailMedium() {
             <Typography variant="h3" sx={{
               fontWeight: "bold", marginBottom: 3, color: "primary.dark", paddingLeft: {xs: 2, md: 3},
               fontSize: {
-                xs: "2rem", md: "2.5rem", xl: "3.5rem",
+                xs: "2rem", md: "2rem", xl: "2.5rem",
               }
             }} gutterBottom>
               {selectedOpportunity.name}
