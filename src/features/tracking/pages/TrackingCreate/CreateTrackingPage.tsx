@@ -1,18 +1,18 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Container, Stack, Typography } from "@mui/material";
-import { FullPageBox } from "../../../components/Layout/FullPageBox";
-import { PrimaryLinkButton } from "../../../components/buttons";
+import { FullPageBox } from "../../../../components/Layout/FullPageBox";
+import { PrimaryLinkButton } from "../../../../components/buttons";
 import { TrackingCreateCard } from "./CreateTrackingCard";
 import { useParams } from "react-router-dom";
 export function TrackingCreatePage() {
   const { id } = useParams();
   const opportunityId = id ? Number(id) : undefined;
   return (
-    <FullPageBox sx={{mx: { xs: "auto", md: "auto", xl: "100px"}}}>
+    <FullPageBox sx={{ mx: { xs: "auto", md: "auto", xl: "100px" } }}>
       <Container
         maxWidth="xl"
-        
-        sx={{ display: "flex", flexDirection: "column"}}
+
+        sx={{ display: "flex", flexDirection: "column" }}
       >
         <Stack
           justifyContent="space-between"
