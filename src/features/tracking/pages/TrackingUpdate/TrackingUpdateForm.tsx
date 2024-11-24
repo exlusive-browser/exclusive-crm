@@ -29,7 +29,7 @@ export function TrackingUpdateForm({ id, opportunityId }: TrackingUpdateFormProp
         register,
         finalOnSubmit: handleSubmit,
         errors,
-    } = useUpdateTracking({ id, opportunityId  });
+    } = useUpdateTracking({ id, opportunityId });
 
     if (isLoading) {
         return (
@@ -94,7 +94,7 @@ export function TrackingUpdateForm({ id, opportunityId }: TrackingUpdateFormProp
                         <InputLabel>Client Contact</InputLabel>
                         <Select
                             label="Client Contact"
-                            defaultValue="" // Valor inicial vacío
+                            defaultValue={Data.clientContactId}
                             {...register("clientContactId", {
                                 required: "Client contact is required",
                             })}

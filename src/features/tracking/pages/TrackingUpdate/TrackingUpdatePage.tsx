@@ -5,7 +5,6 @@ import { Paper } from "@mui/material";
 import { PrimaryLinkButton } from "../../../../components/buttons";
 import { useParams } from "react-router-dom";
 import { TrackingUpdateForm } from "./TrackingUpdateForm";
-// import { OpportunityUpdateForm } from "./OpportunityUpdateForm";
 import { getOpIdByTrackingId } from "../../repositories/tracking.repository"
 import { useQuery } from "@tanstack/react-query";
 
@@ -37,7 +36,7 @@ export function TrackingUpdatePage() {
           size="small"
           sx={{ px: 2, width: "fit-content", alignSelf: "flex-end" }}
           startIcon={<ChevronLeftIcon />}
-          navigateTo="/opportunities"
+          navigateTo={`/opportunities/${opportunityId}`}
         >
           Go back
         </PrimaryLinkButton>
