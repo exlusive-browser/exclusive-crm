@@ -35,8 +35,6 @@ export const getTrackingById = async (id: number): Promise<RepoTracking> => {
 };
 
 export function useUpdateTracking({ id, opportunityId }: useUpdateTrackingProps) {
-  // const { ida } = useParams();
-  // const opportunityId = ida ? Number(ida) : undefined;
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
