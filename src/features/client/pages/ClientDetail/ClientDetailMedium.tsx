@@ -88,7 +88,7 @@ export function ClientDetailMedium() {
       width: 150,
       cellClassName: "actions",
       getActions: (params) => {
-        const opportunity = params.row; // Asegúrate de que `params.row` contiene `id` y `name`.
+        const opportunity = params.row;
 
         return [
           <Button
@@ -142,7 +142,7 @@ export function ClientDetailMedium() {
             }} gutterBottom>
               {selectedOpportunity.name}
             </Typography>
-            <TrackingListPage opportunityId={selectedOpportunity.id} />
+            <TrackingListPage opportunityId={selectedOpportunity.id} showButton = {false}  />
           </Box>
         )}
       </Box>

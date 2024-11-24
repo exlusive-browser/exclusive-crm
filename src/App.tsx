@@ -1,4 +1,4 @@
-import { CssBaseline } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 import { AppProvider } from "./providers/AppProvider";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/routes";
@@ -9,8 +9,8 @@ function App() {
   return (
     <AppProvider>
       <CssBaseline />
-      <Header />      { }
-      <Subheader />   { }
+      <Header />
+      <Subheader />
       <RouterProvider router={router} />
     </AppProvider>
   );

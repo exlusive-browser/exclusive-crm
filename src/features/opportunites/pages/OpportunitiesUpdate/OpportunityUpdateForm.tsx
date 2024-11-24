@@ -84,17 +84,29 @@ export function OpportunityUpdateForm({ id }: OpportunityUpdateFormProps) {
             helperText={errors.businessName?.message}
           />
 
-          <TextField
-            name="businessType"
-            label="businessType"
-            margin="dense"
-            defaultValue={Data.businessType}
-            inputProps={{
-              ...register("businessType"),
-            }}
-            error={!!errors.businessType}
-            helperText={errors.businessType?.message}
-          />
+          <FormControl fullWidth margin="dense" error={!!errors.businessType}>
+            <InputLabel>businessType</InputLabel>
+            <Select
+              label="businessType"
+              defaultValue={Data.businessType}
+              {...register("businessType")}
+              sx={{ borderRadius: 4 }}
+            >
+              <MenuItem value="Resource Outsourcing">
+                Resource Outsourcing
+              </MenuItem>
+              <MenuItem value="Web Development">Web Development</MenuItem>
+              <MenuItem value="Mobile Development">Mobile Development</MenuItem>
+              <MenuItem value="IT Consulting">IT Consulting</MenuItem>
+              <MenuItem value="IT Services">IT Services</MenuItem>
+            </Select>
+            {errors.businessType && (
+              <Typography variant="caption" color="error">
+                {errors.businessType.message}
+              </Typography>
+            )}
+          </FormControl>
+
           <TextField
             name="estimatedValue"
             label="estimatedValue"
@@ -133,18 +145,15 @@ export function OpportunityUpdateForm({ id }: OpportunityUpdateFormProps) {
           <FormControl fullWidth margin="dense" error={!!errors.status}>
             <InputLabel>Status</InputLabel>
             <Select
-              // name="status"
               label="Status"
               defaultValue={Data.status}
               {...register("status")}
+              sx={{ borderRadius: 4 }}
             >
-              <MenuItem value="Resource Outsourcing">
-                Resource Outsourcing
-              </MenuItem>
-              <MenuItem value="Pending">Web Development</MenuItem>
-              <MenuItem value="In Negotiation">Mobile Development</MenuItem>
-              <MenuItem value="Closed">IT Consulting</MenuItem>
-              <MenuItem value="Approved">IT Services</MenuItem>
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="In Negotiation">In Negotiation</MenuItem>
+              <MenuItem value="Closed">Closed</MenuItem>
+              <MenuItem value="Approved">Approved</MenuItem>
             </Select>
             {errors.status && (
               <Typography variant="caption" color="error">
