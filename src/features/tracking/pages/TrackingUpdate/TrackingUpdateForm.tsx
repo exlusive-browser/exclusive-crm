@@ -94,15 +94,15 @@ export function TrackingUpdateForm({ id, opportunityId }: TrackingUpdateFormProp
                         <InputLabel>Client Contact</InputLabel>
                         <Select
                             label="Client Contact"
-                            defaultValue={Number(Data.clientContactId)} // Conversión explícita
+                            defaultValue={Number(Data.clientContactId)}
                             {...register("clientContactId", {
-                                valueAsNumber: true, // Asegura que React Hook Form maneje el valor como número
+                                valueAsNumber: true,
                                 required: "Client contact is required",
                             })}
                             error={!!errors.clientContactId}
                         >
                             {clientContactOptions.map((option) => (
-                                <MenuItem key={option.value} value={Number(option.value)}> {/* Conversión explícita */}
+                                <MenuItem key={option.value} value={Number(option.value)}>
                                     {option.text}
                                 </MenuItem>
                             ))}

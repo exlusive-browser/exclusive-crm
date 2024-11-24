@@ -101,7 +101,6 @@ export function useUpdateTracking({ id, opportunityId }: useUpdateTrackingProps)
 
   // Función de envío del formulario
   const onSubmit: SubmitHandler<UpdateTrackingInput> = async (formData) => {
-    console.log("Data to submit:", formData);
     mutation.mutate(formData);
   };
 
