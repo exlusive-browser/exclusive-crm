@@ -24,10 +24,10 @@ export function model() {
           const clientId = opportunity.clientId;
 
           acc[clientId] = acc[clientId] || { total: 0, closed: 0 };
-          acc[clientId].total += 1;
+          acc[clientId].total += opportunity.estimatedValue;
 
           if (opportunity.status === "Closed") {
-            acc[clientId].closed += 1;
+            acc[clientId].closed += opportunity.estimatedValue;
           }
 
           return acc;
