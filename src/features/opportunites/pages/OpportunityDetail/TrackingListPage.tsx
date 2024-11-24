@@ -39,7 +39,7 @@ export function TrackingListPage({ opportunityId, showButton = true }: TrackingT
             </PrimaryLinkButton>
           )}
         </Stack>
-        <TrackingTable opportunityId={Number(opportunityId)} />
+        <TrackingTable opportunityId={Number(opportunityId)} showButton={showButton} />
       </Container>
     </FullPageBox>
   );
