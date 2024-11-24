@@ -11,6 +11,7 @@ export function Chart2() {
 
   const chartWidth = Math.max(1200, opportunitiesByStatus.length * 100);
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
+
   return (
     <Paper
       elevation={3}
@@ -37,31 +38,36 @@ export function Chart2() {
       </Typography>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
           width: "100%",
+          overflowX: "auto",
         }}
       >
-        <PieChart width={chartWidth} height={400}>
-          <Pie
-            data={opportunitiesByStatus}
-            cx="50%"
-            cy="50%"
-            label={(entry) => `${entry.name} (${entry.value})`}
-            outerRadius={150}
-            dataKey="value"
-          >
-            {opportunitiesByStatus.map((_entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
+        <Box
+          sx={{
+            display: "inline-block", // Permite al gráfico ajustar su ancho
+            minWidth: "100%", // Asegura que el contenedor no se colapse
+          }}
+        >
+          <PieChart width={chartWidth} height={400}>
+            <Pie
+              data={opportunitiesByStatus}
+              cx="50%"
+              cy="50%"
+              label={(entry) => `${entry.name} (${entry.value})`}
+              outerRadius={150}
+              dataKey="value"
+            >
+              {opportunitiesByStatus.map((_entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </Box>
       </Box>
     </Paper>
   );

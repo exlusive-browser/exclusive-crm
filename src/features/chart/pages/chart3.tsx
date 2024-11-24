@@ -1,7 +1,6 @@
 import { Paper, Typography, Box } from "@mui/material";
 import { model } from "../logics/models";
 import { Tooltip, Legend, Cell, Pie, PieChart } from "recharts";
-
 export function Chart3() {
   const { opportunitiesByBusinessType } = model();
 
@@ -37,31 +36,39 @@ export function Chart3() {
 
       <Box
         sx={{
+          overflowX: "auto",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           width: "100%",
         }}
       >
-        <PieChart width={400} height={600}>
-          <Pie
-            data={opportunitiesByBusinessType}
-            cx="50%"
-            cy="50%"
-            label={(entry) => ` ${entry.value}%`}
-            outerRadius={150}
-            dataKey="value"
-          >
-            {opportunitiesByBusinessType.map((_, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
+        <Box
+          sx={{
+            minWidth: 420,
+            display: "inline-block",
+          }}
+        >
+          <PieChart width={400} height={600}>
+            <Pie
+              data={opportunitiesByBusinessType}
+              cx="50%"
+              cy="50%"
+              label={(entry) => ` ${entry.value}%`}
+              outerRadius={150}
+              dataKey="value"
+            >
+              {opportunitiesByBusinessType.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </Box>
       </Box>
     </Paper>
   );
