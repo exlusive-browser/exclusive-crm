@@ -9,8 +9,10 @@ import { OpportuniesListPage } from "../features/opportunites/pages/OpportuniesL
 import { OpportunitiesCreatePage } from "../features/opportunites/pages/OpportunitiesCreate/OpportunitiesCreatePage";
 import { OpportunityDetailPage } from "../features/opportunites/pages/OpportunityDetail/OpportunityDetailPage";
 import { OpportunityUpdatePage } from "../features/opportunites/pages/OpportunitiesUpdate/OpportunityPage";
-import { TrackingCreatePage } from "../features/tracking/pages/CreateTrackingPage";
 import { ChartsPage } from "../features/chart/pages/ChartsPage";
+import { TrackingCreatePage } from "../features/tracking/pages/TrackingCreate/CreateTrackingPage";
+import { TrackingUpdatePage } from "../features/tracking/pages/TrackingUpdate/TrackingUpdatePage";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -51,6 +53,10 @@ export const router = createBrowserRouter([
   {
     path: "/tracking/create/:id",
     element: <TrackingCreatePage />,
+  },
+  {
+    path: "/tracking/update/:id",
+    element: <TrackingUpdatePage />,
   },
   {
     path: "/charts",

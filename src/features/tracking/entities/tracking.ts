@@ -12,7 +12,7 @@ export interface TrackingActivity {
 
 export const CreateTrackingActivityInputSchema = z.object({
   opportunityId: z.number().nonnegative("opportunity ID must be positive"),
-  contactType: z.enum(["Phone Call", "Email", "In-person meeting"]),
+  contactType: z.string().min(1, "sales executive name is required"),
   contactDate: z
     .string()
     .min(1, "Contact date is required")
@@ -27,7 +27,8 @@ export const CreateTrackingActivityInputSchema = z.object({
 
 
 export const UpdateTrackingActivityInputSchema = z.object({
-  contactType: z.enum(["Phone Call", "Email", "In-person meeting"]),
+  opportunityId: z.number().nonnegative("opportunity ID must be positive"),
+  contactType: z.string().min(1, "sales executive name is required"),
   contactDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: "contact date must be a valid date",
   }),
